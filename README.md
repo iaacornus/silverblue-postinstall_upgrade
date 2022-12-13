@@ -6,13 +6,13 @@ Contents, skip to what you need:
 
 - [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
 - [Mounting of external drive temporarily or permanently](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives-and-perhaps-add-it-to-etcfstab)
-- [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-applications)
+- [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
     - [Setup Flatpak](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#setup-flatpak)
     - [RPMFusion](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion)
     - Codecs
         - [Openh264](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#openh264)
         - [GStreamer](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#codecs)
-    - [NVidia](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#nvidia-install)
+    - [NVidia](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#nvidia-drivers)
 - [Flatpak Modifications/Solutions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#flatpak-modifications)
     - [Theming](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming)
     - [Permissions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#permissions)
