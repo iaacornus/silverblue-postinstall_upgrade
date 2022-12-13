@@ -2,6 +2,30 @@
 
 This is a post install/post upgrade recommendations and suggestions for Fedora Silverblue or ostree based Fedora (such as Kinoite)
 
+Contents, skip to what you need:
+
+- [Basics (system update)]()
+- [Mounting of external drive temporarily or permanently](##Mount-external-drives-and-perhaps-add-it-to-`/etc/fstab`)
+- [Third party repos and codecs](## Install-rpm-fusion-and-other-repos-you-need,-codecs-and-applications)
+    - [Flatpak](### Setup flatpak)
+    - [RPMFusion](### RPMfusion)
+    - Codecs
+        - [Openh264](### `Openh264`)
+        - [GStreamer](### Codecs)
+- [NVidia](### Nvidia install)
+- [Flatpak Modifications/Solutions](### Flatpak modifications)
+    - [Theming](#### Theming)
+    - [Permissions](#### Permissions)
+    - [Theming extended](### Theming Extended)
+- [System Optimizations/Cleaning](## System optimizations)
+    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](### Disable Gnome Software)
+    - [Unnecessary flatpaks](### Remove unnecessary gnome flatpaks)
+    - [Laptop Users](### Laptop Users)
+        - [Battery Threshold](#### Set battery threshold for laptop users)
+        - [Battery threshold notification](#### Notification when battery threshold is reached)
+        
+***
+        
 # Post install
 
 You can get the silverblue cheatsheet of Fedora's Team Silverblue [here](https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf).
@@ -79,9 +103,9 @@ rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 
 ### Codecs
 
-**For older version of intel use (replace `intel-media-driver` with `libva-intel-driver`)**
+For intel[^1] (`intel-media-driver`) and then the codecs:
 
-For intel (`intel-media-driver`) and then the codecs:
+[^1]: For older version of intel use (replace `intel-media-driver` with `libva-intel-driver`)
 
 ```
 rpm-ostree install ffmpeg gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi intel-media-driver
@@ -121,14 +145,21 @@ Since flatpaks are sandboxed, you can either install the flatpak version of GTK 
 flatpak search gtk3
 ```
 
-Or override the `$HOME/.themes/` dir, with either one of the commands:
+Or override the themes directory which depends on the theme was installed:
 
 ```
+# choose one, you can do all of them but I don't recommend doing it
+
+# if install in home dir
 sudo flatpak override --system --filesystem=$HOME/.themes # if installed in home dir
-sudo flatpak override --system --filesystem=xdg-data/themes
-sudo flatpak override --system --filesystem=/usr/share/themes # if installed via rpm-ostree
 
+# if layered in image
+sudo flatpak override --system --filesystem=/usr/share/themes 
+
+# or whatever
+sudo flatpak override --system --filesystem=xdg-data/themes
 ```
+
 #### Permissions
 
 Other reddit users suggested, such as [u/IceOleg](https://www.reddit.com/user/IceOleg/), to override the `home` and `host` dir as well with:
@@ -140,9 +171,9 @@ flatpak override --user --nofilesystem=host
 
 Which can be given back to some applications that need it later on. [Flatseal](https://github.com/tchx84/flatseal) is also a good utility for managing permissions as [u/GunnarRoxen](https://www.reddit.com/user/GunnarRoxen/) suggested, can be installed with `flatpak install flathub com.github.tchx84.Flatseal`
 
-The flatpak modifcations made can be reset by `sudo flatpak override --system --reset`. The `--system` flag can also be ommited, and `--user` can be used for user-wide changes.
+The flatpak modifcations made can be undone by `sudo flatpak override --system --reset`. The `--system` flag can also be ommited, and `--user` can be used for user-wide changes.
 
-### Theming
+### Theming Extended
 
 In some cases, where themes do not apply, especially in GTK-4, it can be forced by including it in `$HOME/.profile`, as well as the settings of gtk 4.0:
 
@@ -203,9 +234,11 @@ You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 ```
 
-This will save at least 100mb of RAM.
+This will save at least 100MB of RAM.
 
-### Set battery threshold for laptop users
+### Laptop Users
+
+#### Set battery threshold for laptop users
 
 I recommend setting battery threshold of at least 80% to decrease wear on the battery. This can be done by echoing the threshold to `/sys/class/power_supply/BAT0/charge_control_end_threshold`. However, this resets every reboot, so it is good idea to make a systemd service for it:
 
@@ -224,7 +257,7 @@ ExecStart=/usr/bin/env bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_co
 WantedBy=multi-user.target
 ```
 
-### Notification when battery threshold is reached
+#### Notification when battery threshold is reached
 
 I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/` and do
 
