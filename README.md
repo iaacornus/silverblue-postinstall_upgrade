@@ -4,25 +4,26 @@ This is a post install/post upgrade recommendations and suggestions for Fedora S
 
 Contents, skip to what you need:
 
-- [Basics (system update)]()
-- [Mounting of external drive temporarily or permanently](##Mount-external-drives-and-perhaps-add-it-to-`/etc/fstab`)
-- [Third party repos and codecs](## Install-rpm-fusion-and-other-repos-you-need,-codecs-and-applications)
-    - [Flatpak](### Setup flatpak)
-    - [RPMFusion](### RPMfusion)
+- [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
+- [Mounting of external drive temporarily or permanently](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives-and-perhaps-add-it-to-etcfstab)
+- [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-applications)
+    - [Setup Flatpak](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#setup-flatpak)
+    - [RPMFusion](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion)
     - Codecs
-        - [Openh264](### `Openh264`)
-        - [GStreamer](### Codecs)
-- [NVidia](### Nvidia install)
-- [Flatpak Modifications/Solutions](### Flatpak modifications)
-    - [Theming](#### Theming)
-    - [Permissions](#### Permissions)
-    - [Theming extended](### Theming Extended)
-- [System Optimizations/Cleaning](## System optimizations)
-    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](### Disable Gnome Software)
-    - [Unnecessary flatpaks](### Remove unnecessary gnome flatpaks)
-    - [Laptop Users](### Laptop Users)
-        - [Battery Threshold](#### Set battery threshold for laptop users)
-        - [Battery threshold notification](#### Notification when battery threshold is reached)
+        - [Openh264](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#openh264)
+        - [GStreamer](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#codecs)
+    - [NVidia](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#nvidia-install)
+- [Flatpak Modifications/Solutions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#flatpak-modifications)
+    - [Theming](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming)
+    - [Permissions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#permissions)
+    - [Theming extended](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming-extended)
+- [System Optimizations/Cleaning](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#system-optimizations)
+    - [Mask `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mask-networkmanager-wait-onlineservice)
+    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
+    - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
+- [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
+    - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
+    - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
         
 ***
         
@@ -30,7 +31,9 @@ Contents, skip to what you need:
 
 You can get the silverblue cheatsheet of Fedora's Team Silverblue [here](https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf).
 
-## Update the system
+***
+
+# Update the system
 
 After the system is up, Silverblue, or perhaps by Gnome software, automatically download updates of your system, so running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, usually Gnome would give notifications after the update is done. Although you can check the packages with:
 
@@ -52,7 +55,9 @@ And reboot after to apply the updates (there is also no problem to do this in GU
 systemctl reboot
 ```
 
-## Mount external drives and perhaps add it to `/etc/fstab`
+***
+
+# Mount external drives and perhaps add it to `/etc/fstab`
 
 If you have an external drive, which you can find with `lsblk` or `fdisk -l`, you can mount it into a folder and add it to `/etc/fstab` for automount in boot.
 
@@ -73,21 +78,25 @@ And you can add it into `/etc/fstab` using `sudo nano /etc/fstab` or `vi` if you
 
 Here I suggest using `defaults` for options, 0 for `dump` and `fsck` to disable the checking (increasing the boot time, and avoiding potential errors, and since you only do checking if the drive is part of the OS filesystem), refer to [archwiki - fstab](https://wiki.archlinux.org/title/fstab). Check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct UUID and options, other wise your system won't boot.
 
-## Install rpm-fusion and other repos you need, codecs and applications
+***
 
-### Setup flatpak
+# Install rpm-fusion and other repos you need, codecs, and drivers
+
+## Setup flatpak
 
 ```bash
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
-### RPMfusion
+## RPMfusion
 
 Nonfree: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm`
 
 Free: `rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm`
 
 For both: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm`
+
+## Codecs
 
 ### `Openh264`
 
@@ -101,11 +110,9 @@ You can install it `mozilla-openh264` and `gstreamer1-plugin-openh264` to suppor
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 ```
 
-### Codecs
+### GStreamer
 
-For intel[^1] (`intel-media-driver`) and then the codecs:
-
-[^1]: For older version of intel use (replace `intel-media-driver` with `libva-intel-driver`)
+For intel (`intel-media-driver`) (_use `libva-intel-driver`) for older versions of Intels_) and then the codecs:
 
 ```
 rpm-ostree install ffmpeg gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi intel-media-driver
@@ -115,11 +122,7 @@ For AMD users, refer [here](https://rpmfusion.org/Howto/OSTree)
 
 Reboot again.
 
-## Install the apps from repo
-
-Every boot, the system automatically runs  `rpm-ostree upgrade --check`, so you don't need to run it again.
-
-### Nvidia install
+## NVidia Drivers
 
 Check first if you have nvidia card with `/sbin/lspci | grep -e 3D`, it would show you something like this:
 
@@ -135,9 +138,11 @@ rpm-ostree install akmod-nvidia
 
 And after reboot, check your nvidia install with `modinfo -F version nvidia`, it should give the version number of your driver such as `510.60.02`, not `stderr`.
 
-### Flatpak modifications
+***
 
-#### Theming
+# Flatpak modifications
+
+## Theming
 
 Since flatpaks are sandboxed, you can either install the flatpak version of GTK theme you are using as flatpak as well, which you can find via:
 
@@ -160,7 +165,7 @@ sudo flatpak override --system --filesystem=/usr/share/themes
 sudo flatpak override --system --filesystem=xdg-data/themes
 ```
 
-#### Permissions
+## Permissions
 
 Other reddit users suggested, such as [u/IceOleg](https://www.reddit.com/user/IceOleg/), to override the `home` and `host` dir as well with:
 
@@ -173,7 +178,7 @@ Which can be given back to some applications that need it later on. [Flatseal](h
 
 The flatpak modifcations made can be undone by `sudo flatpak override --system --reset`. The `--system` flag can also be ommited, and `--user` can be used for user-wide changes.
 
-### Theming Extended
+## Theming Extended
 
 In some cases, where themes do not apply, especially in GTK-4, it can be forced by including it in `$HOME/.profile`, as well as the settings of gtk 4.0:
 
@@ -202,9 +207,11 @@ And append `GTK_THEME=<theme-name>` at the end of the `gtk_theme.conf`
 
 If this didn't sufficed, then, you can try `sudo flatpak override --system --env=GTK_THEME='<theme-name>'`
 
-## System optimizations
+***
 
-### Mask `NetworkManager-wait-online.service`
+# System optimizations
+
+## Mask `NetworkManager-wait-online.service`
 
 You can also mask `NetworkManager-wait-online.service`. It is simply a ["service simply waits, doing absolutely nothing, until the network is connected, and when this happens, it changes its state so that other services that depend on the network can be launched to start doing their thing."](https://askubuntu.com/questions/1018576/what-does-networkmanager-wait-online-service-do/1133545#1133545)
 
@@ -212,7 +219,7 @@ You can also mask `NetworkManager-wait-online.service`. It is simply a ["service
 
 Masking it can decrease the boot time of at least ~15s-20s: `sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service`.
 
-### Remove unnecessary gnome flatpaks
+## Remove unnecessary gnome flatpaks
 
 There are also some preinstalled flatpak that you can safely remove. You can completely remove the flatpak with `flatpak uninstall --system --delete-data <app>`. Here are some you can remove:
 
@@ -226,7 +233,7 @@ There are also some preinstalled flatpak that you can safely remove. You can com
 8. Weather apps `org.gnome.Weather`
 9. Disk usage analyzer `org.gnome.baobab`
 
-### Disable Gnome Software
+## Disable Gnome Software
 
 You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
 
@@ -236,9 +243,11 @@ sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 
 This will save at least 100MB of RAM.
 
-### Laptop Users
+***
 
-#### Set battery threshold for laptop users
+# Laptop Users
+
+## Set battery threshold for laptop users
 
 I recommend setting battery threshold of at least 80% to decrease wear on the battery. This can be done by echoing the threshold to `/sys/class/power_supply/BAT0/charge_control_end_threshold`. However, this resets every reboot, so it is good idea to make a systemd service for it:
 
@@ -257,7 +266,7 @@ ExecStart=/usr/bin/env bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_co
 WantedBy=multi-user.target
 ```
 
-#### Notification when battery threshold is reached
+## Notification when battery threshold is reached
 
 I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/` and do
 
