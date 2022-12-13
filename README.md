@@ -110,7 +110,7 @@ For both: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfu
 
 ## Codecs
 
-### `Openh264`
+### `Openh264` or `ffmpeg-libs`
 
 Fedora disable the automatic install of `openh264` by default, for this reason:
 
@@ -121,6 +121,8 @@ You can install it `mozilla-openh264` and `gstreamer1-plugin-openh264` to suppor
 ```
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 ```
+
+However, `mozill-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
 
 ### GStreamer
 
@@ -149,6 +151,14 @@ rpm-ostree install akmod-nvidia
 ```
 
 And after reboot, check your nvidia install with `modinfo -F version nvidia`, it should give the version number of your driver such as `510.60.02`, not `stderr`.
+
+## RPMFusion reinstall
+
+When RPMFusion was installed, it was tied to a specific version of Fedora, thus rebasing for the next release would be a [problem](https://discussion.fedoraproject.org/t/simplifying-updates-for-rpm-fusion-packages-and-other-packages-shipping-their-own-rpm-repos/30364/23), it can be fixed by uninstalling the currently installed and installing a "general" repo:
+
+```
+rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfree-release --install rpmfusion-free-release --install rpmfusion-nonfree-release
+```
 
 ***
 
@@ -229,17 +239,21 @@ sudo flatpak override --system --env=GTK_THEME='<theme-name>'
 
 # System optimizations
 
-## Mask `NetworkManager-wait-online.service`
+## Disable `NetworkManager-wait-online.service`
 
-You can also mask `NetworkManager-wait-online.service`. It is simply a ["service simply waits, doing absolutely nothing, until the network is connected, and when this happens, it changes its state so that other services that depend on the network can be launched to start doing their thing."](https://askubuntu.com/questions/1018576/what-does-networkmanager-wait-online-service-do/1133545#1133545)
+You can also disable `NetworkManager-wait-online.service`. It is simply a ["service simply waits, doing absolutely nothing, until the network is connected, and when this happens, it changes its state so that other services that depend on the network can be launched to start doing their thing."](https://askubuntu.com/questions/1018576/what-does-networkmanager-wait-online-service-do/1133545#1133545)
 
 > In some multi-user environments part of the boot-up process can come from the network. For this case `systemd` defaults to waiting for the network to come on-line before certain steps are taken.
 
-Masking it can decrease the boot time of at least ~15s-20s:
+Disabling it can decrease the boot time of at least ~15s-20s:
 
 ```
-sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service
+sudo systemctl disable NetworkManager-wait-online.service
 ```
+
+Masking it is not recommend, since as explained by [u/chrisawi](https://www.reddit.com/user/chrisawi/):
+
+> Also, wait-online services are `WantedBy=network-online.target`, so they do nothing unless another service explicitly pulls that target in because it can't handle starting before the network is up. The nfs services are a typical example, see: `systemctl list-dependencies --reverse network-online.target`. It might be better to disable such services than to leave them potentially broken.
 
 ## Remove unnecessary gnome flatpaks
 
