@@ -218,8 +218,17 @@ StartLimitBurst=0
 [Service]
 Type=oneshot
 Restart=on-failure
-ExecStart=/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold'
+ExecStart=/usr/bin/env bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold'
 
 [Install]
 WantedBy=multi-user.target
+```
+
+### Notification when battery threshold is reached
+
+I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/` and do
+
+```
+systemctl --user enable battery-threshold.service
+systemctl --user enable battery-threshold.timer
 ```
