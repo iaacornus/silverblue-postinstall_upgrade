@@ -5,6 +5,7 @@ Wants=battery-notify.timer
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/env bash -c %h/.sys/battery-threshold.sh
+Restart=on-failure
 
 [Install]
 WantedBy=default.target
