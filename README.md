@@ -29,16 +29,22 @@ Contents, skip to what you need:
         
 # Post install
 
+**You can skip all of the steps, these are not required, but can be beneficial or may be some use later.**
+
 You can get the silverblue cheatsheet of Fedora's Team Silverblue [here](https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf).
+
+## Note/Disclaimer
+
+I highly suggest to avoid layering as much as possible to the system image, thus you would notice the installation of rpmfusion repositories separated. You should read first the information above the command and try to think it through before executing the given command.
 
 ***
 
 # Update the system
 
-After the system is up, Silverblue, or perhaps by Gnome software, automatically download updates of your system, so running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, usually Gnome would give notifications after the update is done. Although you can check the packages with:
+After the system is Gnome software automatically download updates of your system, so running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, usually Gnome would give notifications after the update is done. Although you can check the packages with:
 
 ```bash
-rpm-ostree upgrade
+rpm-ostree upgrade --check
 ```
 
 If you just want a summary of update, such as the added, removed and upgraded do: `rpm-ostree upgrade --check` or `rpm-ostree upgrade --preview`
@@ -59,13 +65,13 @@ systemctl reboot
 
 # Mount external drives and perhaps add it to `/etc/fstab`
 
-If you have an external drive, which you can find with `lsblk` or `fdisk -l`, you can mount it into a folder and add it to `/etc/fstab` for automount in boot.
+If you have an external drive, which you can find with `lsblk` or `fdisk -l` and mount it using:
 
 ```bash
 sudo mount /dev/sdX <dir>
 ```
 
-And you can add it into `/etc/fstab` using `sudo nano /etc/fstab` or `vi` if you want. List the drives and their `UUID` with `lsblk -f` and add it to `/etc/fstab` with format of:
+To automatically mount it in boot, include the drive in `/etc/fstab`, you need the `UUID` of the drive and its mount point. List the drives and their `UUID` with `lsblk -f` and add it to `/etc/fstab` with format of:
 
 ```
 # Ignore the comments, this is and example to fstab entry, don't copy and paste this, your system won't boot
@@ -82,13 +88,19 @@ Here I suggest using `defaults` for options, 0 for `dump` and `fsck` to disable 
 
 # Install rpm-fusion and other repos you need, codecs, and drivers
 
+Note that some of the drivers may come preinstalled in your system, confirm before proceeding.
+
 ## Setup flatpak
+
+Fedora has its own flatpak repository where it filters some of the applications, for access to flathub setup the flathub repository: 
 
 ```bash
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
 ## RPMfusion
+
+The main repository of Fedora does not contain every applications, some of the codecs are in the RPMFusion, the NVidia drivers are in the nonfree, while some of the codecs are in free.
 
 Nonfree: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm`
 
@@ -142,15 +154,17 @@ And after reboot, check your nvidia install with `modinfo -F version nvidia`, it
 
 # Flatpak modifications
 
+Flatpaks are sandboxed, it may not work as expected. These are some solutions to the errors that may arise or encountered.
+
 ## Theming
 
-Since flatpaks are sandboxed, you can either install the flatpak version of GTK theme you are using as flatpak as well, which you can find via:
+Since flatpaks are sandboxed, you can either install the flatpak version of GTK theme you are using as flatpak, which you can find by using `search`:
 
 ```bash
 flatpak search gtk3
 ```
 
-Or override the themes directory which depends on the theme was installed:
+Or override the themes directory which depends on how the theme was installed:
 
 ```
 # choose one, you can do all of them but I don't recommend doing it
@@ -180,17 +194,17 @@ The flatpak modifcations made can be undone by `sudo flatpak override --system -
 
 ## Theming Extended
 
-In some cases, where themes do not apply, especially in GTK-4, it can be forced by including it in `$HOME/.profile`, as well as the settings of gtk 4.0:
+In some cases, where themes do not apply, especially in GTK4, it can be forced by including it in `$HOME/.profile`, as well as the settings (`settings.ini`):
+
+**Do not copy and execute the command, replace `<theme-name>` with the name of the theme**
 
 ```
 echo "export GTK_THEME=<theme-name>" >> $HOME/.profile; if [ ! -d $HOME/.config/environment.d/ ]; then mkdir -p $HOME/.config/environment.d/; fi; echo "GTK_THEME=<theme-name>" >> $HOME/.config/environment.d/gtk_theme.conf; echo "GTK_THEME=<theme-name>" >> $HOME/.config/gtk-4.0/settings.ini
 ```
 
-**Replace `<theme-name>` with the name of the theme**
-
 Which does (explanation):
 
-1. `echo "export GTK_THEME=<theme-name>" >> $HOME/.profile`, append `export GTK_THEME=<theme-name>` to `$HOME/.profile`
+1. `echo "export GTK_THEME=<theme-name>" >> $HOME/.profile`: append `export GTK_THEME=<theme-name>` to `$HOME/.profile`
 2. Create `$HOME/.config/environment.d/gtk_theme.conf` file:
 
 ```bash
@@ -205,7 +219,11 @@ And append `GTK_THEME=<theme-name>` at the end of the `gtk_theme.conf`
 
 3. And finally append `GTK_THEME=<theme-name>` to `settings.ini` config.
 
-If this didn't sufficed, then, you can try `sudo flatpak override --system --env=GTK_THEME='<theme-name>'`
+If this didn't sufficed, then, you can try:
+
+```
+sudo flatpak override --system --env=GTK_THEME='<theme-name>'
+```
 
 ***
 
@@ -217,11 +235,23 @@ You can also mask `NetworkManager-wait-online.service`. It is simply a ["service
 
 > In some multi-user environments part of the boot-up process can come from the network. For this case `systemd` defaults to waiting for the network to come on-line before certain steps are taken.
 
-Masking it can decrease the boot time of at least ~15s-20s: `sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service`.
+Masking it can decrease the boot time of at least ~15s-20s:
+
+```
+sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service
+```
 
 ## Remove unnecessary gnome flatpaks
 
-There are also some preinstalled flatpak that you can safely remove. You can completely remove the flatpak with `flatpak uninstall --system --delete-data <app>`. Here are some you can remove:
+There are also some preinstalled flatpak that you can safely remove. You can completely remove the flatpak with:
+
+```
+flatpak uninstall --system --delete-data <app>
+# example
+flatpak uninstall --system --delete-data org.gnome.Calculator
+```
+ 
+Here are some you can remove:
 
 1. Calculator `org.gnome.Calculator`
 2. Calendar `org.gnome.Calendar`
@@ -235,13 +265,11 @@ There are also some preinstalled flatpak that you can safely remove. You can com
 
 ## Disable Gnome Software
 
-You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
+Gnome software launches for some reason even tho it is not used, this takes at least 100MB of RAM upto 900MB (as reported anecdotically). You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
 
 ```
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 ```
-
-This will save at least 100MB of RAM.
 
 ***
 
@@ -268,7 +296,7 @@ WantedBy=multi-user.target
 
 ## Notification when battery threshold is reached
 
-I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/` and do
+I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/`. Then create a `.sys` directory inside your `$HOME` with `mkdir $HOME/.sys` and move `battery-notify.sh` inside the created directory, then activate the service and timer:
 
 ```
 systemctl --user enable battery-threshold.service
