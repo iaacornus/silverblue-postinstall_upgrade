@@ -4,7 +4,7 @@ Requires=battery-notify.service
 
 [Timer]
 Unit=battery-notify.service
-OnCalendar=*-*-* *:*:00
+OnCalendar=*:0/15
 
 [Install]
 WantedBy=timers.target
