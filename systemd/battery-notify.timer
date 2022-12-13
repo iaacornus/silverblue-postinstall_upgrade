@@ -1,0 +1,10 @@
+[Unit]
+Description=Check battery level
+Requires=battery-notify.service
+
+[Timer]
+Unit=battery-notify.service
+OnCalendar=*-*-* *:*:00
+
+[Install]
+WantedBy=timers.target

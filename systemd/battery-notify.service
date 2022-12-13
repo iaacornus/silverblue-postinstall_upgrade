@@ -1,0 +1,10 @@
+[Unit]
+Description=Check battery level
+Wants=battery-notify.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env bash -c %h/.sys/battery-threshold.sh
+
+[Install]
+WantedBy=default.target
