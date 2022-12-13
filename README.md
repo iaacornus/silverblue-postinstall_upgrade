@@ -13,6 +13,7 @@ Contents, skip to what you need:
         - [Openh264](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#openh264)
         - [GStreamer](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#codecs)
     - [NVidia](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#nvidia-drivers)
+    - [Reinstalling RPMFusion to avoid rebasing problems](https://github.com/iaacornus/silverblue-postinstall_upgrade#rpmfusion-reinstall)
 - [Flatpak Modifications/Solutions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#flatpak-modifications)
     - [Theming](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming)
     - [Permissions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#permissions)
@@ -24,6 +25,7 @@ Contents, skip to what you need:
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
+    - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
         
 ***
         
@@ -316,3 +318,21 @@ I created a systemd service and timer in `systemd/` that checks the battery leve
 systemctl --user enable battery-threshold.service
 systemctl --user enable battery-threshold.timer
 ```
+
+## Keyboard backlight
+
+In some laptops, keyboard backlight may not work out of the box, it can be toggled with `brightnessctl`. First find the keyboard backlight in `/sys/class/leds` by listing the directories, it is usually named `::kbd_backlight/brightness` which can be contained in one more directory, in Asus laptops it is usually in `/sys/class/leds/asus\:\:kbd_backlight/brightness`.
+
+You can find out the current brightness by:
+
+```
+brightnessctl --device='<device>::kbd_backlight' info
+```
+
+If it is set to 0, it is disabled, in 1 it is in lowest, and as the number increment, the brightness increases. You can set the brightness by `brightnessctl --device='<device>::kbd_backlight' set 3`, for example in Asus laptops it is:
+
+```
+brightnessctl --device='asus::kbd_backlight' set 3
+```
+
+You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
