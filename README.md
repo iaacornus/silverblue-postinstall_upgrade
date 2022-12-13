@@ -296,7 +296,7 @@ WantedBy=multi-user.target
 
 ## Notification when battery threshold is reached
 
-I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/`. Then create a `.sys` directory inside your `$HOME` with `mkdir $HOME/.sys` and move `battery-notify.sh` inside the created directory, then activate the service and timer:
+I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/`. Then create a `.sys` directory inside your `$HOME` with `mkdir $HOME/.sys` and move [`battery-threshold.sh`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/scripts/battery-threshold.sh) inside the created directory, then activate the service and timer:
 
 ```
 systemctl --user enable battery-threshold.service
