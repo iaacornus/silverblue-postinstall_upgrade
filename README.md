@@ -302,7 +302,7 @@ To disable this in Fedora encrypted using `dm-crypt`, replace `discard` in `/etc
 luks-<UUID> UUID=<UUID> none no-read-workqueue,no-write-workqueue
 ```
 
-Where `<UUID>` should be unique to your system. Since Fedora uses LUKS2, you should also set the parameter with `cryptsetup`. Find the device with `lsblk -p`, the one with `/dev/mapper/luks-<UUID>` is the one encrypted, for example:
+Where `<UUID>` should be unique to your system. Or by using `cryptsetup` which I recommend, Fedora uses LUKS2. Find the device with `lsblk -p`, the one with `/dev/mapper/luks-<UUID>` is the one encrypted, for example:
 
 ```
 ❯ lsblk -p
