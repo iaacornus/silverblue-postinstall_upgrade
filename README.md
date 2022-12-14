@@ -23,11 +23,13 @@ Contents, skip to what you need:
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+    - [Removing base image packages]()
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
-        
+- [Tips and Tricks]
+    - [Contrast current modifications of configs with the default]()
 ***
         
 # Post install
@@ -346,6 +348,18 @@ sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent 
 
 And do a reboot.
 
+# Removing base image packages
+
+**This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
+
+[u/VVine6](https://www.reddit.com/user/VVine6/) recommended some packages that can be removed from the base image, which includes VM host support and Gnome classic shell, which can be removed via:
+
+```
+rpm-ostree override remove open-vm-tools-desktop open-vm-tools qemu-guest-agent spice-vdagent spice-webdavd virtualbox-guest-additions gnome-shell-extension-apps-menu gnome-classic-session gnome-shell-extension-window-list gnome-shell-extension-background-logo gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu
+```
+
+Later on, before rebasing this needs to be included back, which can be done with `rpm-ostree override reset`.
+
 ***
 
 # Laptop Users
@@ -395,3 +409,17 @@ brightnessctl --device='asus::kbd_backlight' set 3
 ```
 
 You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
+
+***
+
+# Tips and Tricks
+
+## Contrast current modifications of configs with the default
+
+This can be helpful in debugging as suggested by [u/VVine6](https://www.reddit.com/user/VVine6/)
+
+```
+sudo ostree admin config-diff | sort | grep -v system.control
+```
+
+> The output will list files as Removed, Added or Modified. The defaults are available in `/usr/etc` in the very same path, so to revert a modification or a removal simple copy the file over.
