@@ -22,7 +22,7 @@ Contents, skip to what you need:
     - [Mask `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mask-networkmanager-wait-onlineservice)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
-    - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/edit/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+    - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
