@@ -5,7 +5,8 @@ This is a post install/post upgrade recommendations and suggestions for Fedora S
 Contents, skip to what you need:
 
 - [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
-- [Mounting of external drive temporarily or permanently](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives-and-perhaps-add-it-to-etcfstab)
+- [Mount external drives](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+    - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md) 
 - [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
     - [Setup Flatpak](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#setup-flatpak)
     - [RPMFusion](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion)
