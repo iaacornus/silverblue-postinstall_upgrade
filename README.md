@@ -19,7 +19,7 @@ Contents, skip to what you need:
     - [Permissions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#permissions)
     - [Theming extended](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming-extended)
 - [System Optimizations/Cleaning](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#system-optimizations)
-    - [Mask `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mask-networkmanager-wait-onlineservice)
+    - [Disable `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
