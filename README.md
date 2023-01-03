@@ -28,6 +28,8 @@ Contents, skip to what you need:
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
+- [Customizations]()
+    - [Use FISH as default shell]()
 - [Tips and Tricks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#tips-and-tricks)
     - [Contrast current modifications of configs with the default](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#contrast-current-modifications-of-configs-with-the-default)
 ***
@@ -413,6 +415,68 @@ brightnessctl --device='asus::kbd_backlight' set 3
 ```
 
 You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
+
+***
+
+# Customizations
+
+## Use FISH as default shell
+
+> Fish (friendly interactive shell) is a smart and user-friendly command line shell that works on Linux, MacOS, and other operating systems. Use it for everyday work in your terminal and for scripting. Scripts written in fish are less cryptic than their equivalent bash versions.
+
+FISH (Friendly Interactive SHell) is an alternative for BASH (Bourne Again SHell) and ZSH (Z SHell) which comes with out-of-the-box useful features such as:
+    - Syntax highlighting
+    - Web based configuration
+    - Inline searchable history
+    - Inline autosuggestion
+    - Tab completion using manpage data
+    
+DEMO (Credits to Sid Mohanty, [link to original article, suggested read for more info](https://betterprogramming.pub/fish-vs-zsh-vs-bash-reasons-why-you-need-to-switch-to-fish-4e63a66687eb?gi=fc345308724e))
+
+![](https://miro.medium.com/max/640/1*AhoFOHQxoLzKiLMg-NVRKQ.gif)
+
+
+FOR INTERESTED:
+- [https://opensource.com/article/20/3/fish-shell](https://opensource.com/article/20/3/fish-shell) 
+- [https://fedoramagazine.org/fish-a-friendly-interactive-shell/](https://fedoramagazine.org/fish-a-friendly-interactive-shell/)
+
+### Install FISH
+
+To install FISH in OSTree systems:
+
+```
+rpm-ostree isntall fish
+```
+
+Then to allow toolbox to use it:
+
+```
+sudo dnf install install fish # if inside toolbox or
+toolbox run sudo dnf install fish
+```
+
+### Set FISH as default shell
+
+Since Fedora does not include `chsh` in the base image of Silverblue due to its setuid root, thus to set the default shell use:
+
+```
+# after reboot
+sudo usermod --shell /usr/bin/fish $USER
+```
+
+### Customize FISH (basics)
+
+FISH comes with web-based configuration which can be access with:
+
+```
+fish_config
+```
+
+This will give a GUI where you can set your prompt, color of syntax highlighting (colorscheme), aliases (abbreviations), functions (view of defined functions). Then to disable the welcome message you can run (once):
+
+```
+set -U fish_greeting
+```
 
 ***
 
