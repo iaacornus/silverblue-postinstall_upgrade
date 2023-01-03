@@ -73,15 +73,17 @@ systemctl reboot
 
 ***
 
-# Mount external drives and perhaps add it to `/etc/fstab`
+# Mount external drives
 
-If you have an external drive, which you can find with `lsblk` or `fdisk -l` and mount it using:
+If you have an external drive, which you can find with `lsblk` or `fdisk -l` and mount using:
 
 ```bash
 sudo mount /dev/sdX <dir>
 ```
 
-To automatically mount it in boot, include the drive in `/etc/fstab`, you need the `UUID` of the drive and its mount point. List the drives and their `UUID` with `lsblk -f` and add it to `/etc/fstab` with format of:
+## Automatically mount in boot
+
+To automatically mount it in boot, include the drive in `/etc/fstab`, you need the `UUID` of the drive and its mount point. To do so, list the drives and their `UUID` with `lsblk -f` and add it to `/etc/fstab` with format of:
 
 ```
 # Ignore the comments, this is and example to fstab entry, don't copy and paste this, your system won't boot
@@ -92,7 +94,7 @@ To automatically mount it in boot, include the drive in `/etc/fstab`, you need t
 # UUID=<your device uuid>                   <mount point>               <filesystem format> <options> <dump>  <fsck>
 ```
 
-Here I suggest using `defaults` for options, 0 for `dump` and `fsck` to disable the checking (increasing the boot time, and avoiding potential errors, and since you only do checking if the drive is part of the OS filesystem), refer to [archwiki - fstab](https://wiki.archlinux.org/title/fstab). Check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct UUID and options, other wise your system won't boot.
+Here I suggest using `defaults` for options, 0 for `dump` and `fsck` to disable the checking (increasing the boot time, and avoiding potential errors, and since you only do checking if the drive is part of the OS filesystem), refer to [ArchWiki - fstab](https://wiki.archlinux.org/title/fstab). Check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct UUID and options, other wise your system won't boot.
 
 ***
 
