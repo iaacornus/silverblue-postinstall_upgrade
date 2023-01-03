@@ -28,8 +28,11 @@ Contents, skip to what you need:
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
-- [Customizations]()
-    - [Use FISH as default shell]()
+- [Customizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+    - [Use FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+        - [Install FISH](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+        - [Set FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+        - [Customize FISH (basics)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
 - [Tips and Tricks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#tips-and-tricks)
     - [Contrast current modifications of configs with the default](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#contrast-current-modifications-of-configs-with-the-default)
 ***
