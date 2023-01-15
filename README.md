@@ -29,7 +29,7 @@ Contents, skip to what you need:
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
-    - [Set suspend to deep sleep](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-suspend-to-deep-sleep
+    - [Set suspend to deep sleep](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-suspend-to-deep-sleep)
 - [Customizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
     - [Use FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
         - [Install FISH](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
