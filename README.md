@@ -29,6 +29,7 @@ Contents, skip to what you need:
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
+    - [Set suspend to deep sleep](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-suspend-to-deep-sleep
 - [Customizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
     - [Use FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
         - [Install FISH](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
@@ -422,9 +423,11 @@ brightnessctl --device='asus::kbd_backlight' set 3
 
 You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
 
-## Set sleep (suspend) mode to deep sleep if battery drains fast in s2idle
+## Set suspend to deep sleep
 
-In some laptop, the battery drains rapidly under s2idle, particularly those with Alder Lake CPUs. To fix this, you can set the kernel parameters with `mem_sleep_default=deep`. To do this properly, use the command, `grubby`:
+**Only if your laptop drains fast under `s2idle`**
+
+In some laptop, the battery drains rapidly when suspended under `s2idle`, particularly those with Alder Lake CPUs. To fix this, you can set the kernel parameters with `mem_sleep_default=deep`. To do this properly, use the command, `grubby`:
 
 ```
 sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
