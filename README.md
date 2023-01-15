@@ -422,6 +422,16 @@ brightnessctl --device='asus::kbd_backlight' set 3
 
 You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
 
+## Set sleep (suspend) mode to deep sleep if battery drains fast in s2idle
+
+In some laptop, the battery drains rapidly under s2idle, particularly those with Alder Lake CPUs. To fix this, you can set the kernel parameters with `mem_sleep_default=deep`. To do this properly, use the command, `grubby`:
+
+```
+sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
+```
+
+Do a reboot, then check it with `cat /sys/power/mem_sleep`, where the `deep` should be enclosed with brackets (`[deep]`).
+
 ***
 
 # Customizations
