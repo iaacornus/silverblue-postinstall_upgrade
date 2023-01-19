@@ -5,38 +5,39 @@ This is a post install/post upgrade recommendations and suggestions for Fedora S
 Contents, skip to what you need:
 
 - [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
-- [Mount external drives](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-    - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md) 
+- [Mount external drives](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives)
+    - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#automatically-mount-in-boot) 
 - [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
     - [Setup Flatpak](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#setup-flatpak)
     - [RPMFusion](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion)
-    - Codecs
-        - [Openh264](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#openh264)
-        - [GStreamer](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#codecs)
+    - [Codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#codecs)
+        - [Openh264](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#openh264-or-ffmpeg-libs)
+        - [GStreamer](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#gstreamer)
     - [NVidia](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#nvidia-drivers)
-    - [Reinstalling RPMFusion to avoid rebasing problems](https://github.com/iaacornus/silverblue-postinstall_upgrade#rpmfusion-reinstall)
+    - [Reinstalling RPMFusion to avoid rebasing problems](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion-reinstall)
 - [Flatpak Modifications/Solutions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#flatpak-modifications)
     - [Theming](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming)
     - [Permissions](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#permissions)
     - [Theming extended](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#theming-extended)
-- [System Optimizations/Cleaning](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#system-optimizations)
-    - [Disable `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
+- [System Optimizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#system-optimizations)
+    - [Disable `NetworkManager-wait-online.service`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-networkmanager-wait-onlineservice)
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
+    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-gnome-software)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
     - [Removing base image packages](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#removing-base-image-packages)
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
-    - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold-for-laptop-users)
+    - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold)
     - [Battery threshold notification](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#keyboard-backlight)
     - [Set suspend to deep sleep](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-suspend-to-deep-sleep)
-- [Customizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-    - [Use FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-        - [Install FISH](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-        - [Set FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
-        - [Customize FISH (basics)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md)
+- [Customizations](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#customizations)
+    - [Use FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#use-fish-as-default-shell)
+        - [Install FISH](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-fish)
+        - [Set FISH as default shell](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-fish-as-default-shell)
+        - [Customize FISH (basics)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#customize-fish-basics)
 - [Tips and Tricks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#tips-and-tricks)
     - [Contrast current modifications of configs with the default](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#contrast-current-modifications-of-configs-with-the-default)
+
 ***
         
 # Post install
@@ -299,7 +300,7 @@ Gnome software launches for some reason even tho it is not used, this takes at l
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 ```
 
-# Disable `dm-crypt` workqeues for SSD user to improve performance
+## Disable `dm-crypt` workqeues for SSD user to improve performance
 
 See this[^1] first
 
@@ -361,7 +362,7 @@ sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent 
 
 And do a reboot.
 
-# Removing base image packages
+## Removing base image packages
 
 **This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
 
