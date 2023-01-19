@@ -37,6 +37,12 @@ Contents, skip to what you need:
         - [Customize FISH (basics)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#customize-fish-basics)
 - [Tips and Tricks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#tips-and-tricks)
     - [Contrast current modifications of configs with the default](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#contrast-current-modifications-of-configs-with-the-default)
+- [Miscellaneous](https://github.com/iaacornus/silverblue-postinstall_upgrade#miscellaneous)
+    - [VSCode](https://github.com/iaacornus/silverblue-postinstall_upgrade#vscode)
+        - [Install](https://github.com/iaacornus/silverblue-postinstall_upgrade#install)
+            - [Toolbox installation](https://github.com/iaacornus/silverblue-postinstall_upgrade#toolbox-installation)
+            - [Layering](https://github.com/iaacornus/silverblue-postinstall_upgrade#layering)
+        - [Block telemetry](https://github.com/iaacornus/silverblue-postinstall_upgrade#block-telemetry)   
 
 ***
         
@@ -511,6 +517,8 @@ sudo ostree admin config-diff | sort | grep -v system.control
 ```
 
 > The output will list files as Removed, Added or Modified. The defaults are available in `/usr/etc` in the very same path, so to revert a modification or a removal simple copy the file over.
+
+***
 
 # Miscellaneous
 
