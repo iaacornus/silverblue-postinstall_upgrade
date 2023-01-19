@@ -511,3 +511,79 @@ sudo ostree admin config-diff | sort | grep -v system.control
 ```
 
 > The output will list files as Removed, Added or Modified. The defaults are available in `/usr/etc` in the very same path, so to revert a modification or a removal simple copy the file over.
+
+# Miscellaneous
+
+## VSCode
+
+There are three ways to install via flatpak, toolbox or layering.
+
+### Install
+
+#### Toolbox installation
+
+**This section assumes that you will use Fedora as toolbox container**
+
+Create a toolbox with `toolbox create`, you can specify the version or distro you want to use with `-r` and `-d`, respectively. Then go inside the toolbox and update the system:
+
+```
+sudo dnf update
+```
+
+And following VSCode's documentation, import the GPG keys and create a repository:
+
+```
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+```
+
+```
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+```
+
+Then update the metadata with `sudo dnf check-update`, and do `sudo dnf install code`. To create a desktop icon:
+
+```
+touch $HOME/.local/share/applications/code.desktop
+```
+
+And append the following lines of code:
+
+```
+[Desktop Entry]
+Type=Application
+Version=1.0 # you can replace the version
+Name=Visual Studio Code
+Exec=toolbox run code
+Icon=com.visualstudio.code
+Terminal=false
+```
+
+If you used a toolbox with different name, change `Exec` to `toolbox --container <name-of-toolbox> run code`.
+
+#### Layering
+
+Since the filesystem is immutable, you cannot import the GPG, unless you do specific changes which is not covered here. Thus, simply create a repository for code:
+
+```
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+```
+
+Then refresh the metadata with `rpm-ostree refresh-md`, and do `rpm-ostree install code`.
+
+## Block telemetry
+
+VSCode contains telemetry, to block some of them block some of the domain in your `/etc/hosts` by setting it to loopback (`127.0.0.1`) by appending:
+
+```
+127.0.0.1	dc.services.visualstudio.com
+127.0.0.1	dc.trafficmanager.net
+127.0.0.1	vortex.data.microsoft.com
+127.0.0.1	weu-breeziest-in.cloudapp.net
+127.0.0.1	mobile.events.data.microsoft.com
+```
+
+Then in `$HOME/.config/Code/User/settings.json`, include:
+
+```
+"telemetry.telemetryLevel": "off"
+```
