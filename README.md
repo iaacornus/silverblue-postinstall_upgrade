@@ -185,11 +185,12 @@ rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfr
 
 # Flatpak modifications
 
-Flatpaks are sandboxed, it may not work as expected. These are some solutions to the errors that may arise or encountered.
+Flatpak apps are sandboxed, and thus may not work as expected. The following are some solutions to the errors that may arise from default Flatpak security permissions.
 
 ## Theming
 
-Since flatpaks are sandboxed, you can either install the flatpak version of GTK theme you are using as flatpak, which you can find by using `search`:
+Due to the aforementioned sandboxing, there are 2 methods to installing themes:    
+Either the flatpak version of GTK theme you are using as a flatpak, which you can find by using `search`:
 
 ```bash
 flatpak search gtk3
