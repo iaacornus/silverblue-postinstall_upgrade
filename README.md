@@ -137,13 +137,13 @@ Fedora disable the automatic install of `openh264` by default, for this reason:
 
 > Upstream Firefox versions download and install the OpenH264 plugin by default automatically. Due to it's binary nature, Fedora disables this automatic download.
 
-You can install it `mozilla-openh264` and `gstreamer1-plugin-openh264` to support codecs in Firefox. And do `CTRL` + `Shift` + `A` in Firefox to go into the add ons manager > Plugins, and enable the OpenH264* plugins.
+You can install the packages `mozilla-openh264` and `gstreamer1-plugin-openh264` to support these codecs in Firefox. And do `CTRL` + `Shift` + `A` in Firefox to go into the add ons manager > Plugins, and enable the OpenH264* plugins.
 
 ```
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 ```
 
-However, `mozill-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
+However, `mozilla-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
 
 ### GStreamer
 
