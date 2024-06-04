@@ -143,11 +143,11 @@ You can install it `mozilla-openh264` and `gstreamer1-plugin-openh264` to suppor
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 ```
 
-However, `mozill-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
+However, `mozilla-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
 
 ### GStreamer
 
-For intel (`intel-media-driver`) (_use `libva-intel-driver`) for older versions of Intels_) and then the codecs:
+For intel (`intel-media-driver`) (_use `libva-intel-driver` for older versions of Intels_) and then the codecs:
 
 ```
 rpm-ostree install ffmpeg gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi intel-media-driver
@@ -221,7 +221,7 @@ flatpak override --user --nofilesystem=host
 
 Which can be given back to some applications that need it later on. [Flatseal](https://github.com/tchx84/flatseal) is also a good utility for managing permissions as [u/GunnarRoxen](https://www.reddit.com/user/GunnarRoxen/) suggested, can be installed with `flatpak install flathub com.github.tchx84.Flatseal`
 
-The flatpak modifcations made can be undone by `sudo flatpak override --system --reset`. The `--system` flag can also be ommited, and `--user` can be used for user-wide changes.
+The flatpak modifications made can be undone by `sudo flatpak override --system --reset`. The `--system` flag can also be omitted, and `--user` can be used for user-wide changes.
 
 ## Theming Extended
 
@@ -300,7 +300,7 @@ Here are some you can remove:
 
 ## Disable Gnome Software
 
-Gnome software launches for some reason even tho it is not used, this takes at least 100MB of RAM upto 900MB (as reported anecdotically). You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
+Gnome software launches for some reason even tho it is not used, this takes at least 100MB of RAM up to 900MB (as reported anecdotally). You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
 
 ```
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
@@ -471,7 +471,7 @@ FOR INTERESTED:
 To install FISH in OSTree systems:
 
 ```
-rpm-ostree isntall fish
+rpm-ostree install fish
 ```
 
 Then to allow toolbox to use it:
