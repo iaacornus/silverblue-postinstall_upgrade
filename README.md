@@ -137,7 +137,7 @@ Fedora disable the automatic install of `openh264` by default, for this reason:
 
 > Upstream Firefox versions download and install the OpenH264 plugin by default automatically. Due to it's binary nature, Fedora disables this automatic download.
 
-You can install it `mozilla-openh264` and `gstreamer1-plugin-openh264` to support codecs in Firefox. And do `CTRL` + `Shift` + `A` in Firefox to go into the add ons manager > Plugins, and enable the OpenH264* plugins.
+You can install the packages `mozilla-openh264` and `gstreamer1-plugin-openh264` to support these codecs in Firefox. And do `CTRL` + `Shift` + `A` in Firefox to go into the add ons manager > Plugins, and enable the OpenH264* plugins.
 
 ```
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
@@ -185,11 +185,12 @@ rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfr
 
 # Flatpak modifications
 
-Flatpaks are sandboxed, it may not work as expected. These are some solutions to the errors that may arise or encountered.
+Flatpak apps are sandboxed, and thus may not work as expected. The following are some solutions to the errors that may arise from default Flatpak security permissions.
 
 ## Theming
 
-Since flatpaks are sandboxed, you can either install the flatpak version of GTK theme you are using as flatpak, which you can find by using `search`:
+Due to the aforementioned sandboxing, there are 2 methods to installing themes:    
+Either the flatpak version of GTK theme you are using as a flatpak, which you can find by using `search`:
 
 ```bash
 flatpak search gtk3
