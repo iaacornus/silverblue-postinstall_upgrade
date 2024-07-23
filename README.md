@@ -3,6 +3,9 @@
 Post install/upgrade recommendations and suggestions for Fedora Silverblue or `ostree` based Fedora (such as Kinoite). Contents, skip to what you need:
 
 - [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
+<!-- TODO
+- [Firmware update]
+-->
 - [Mount external drives](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives)
     - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#automatically-mount-in-boot)
 - [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
@@ -22,6 +25,11 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-gnome-software)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+    <!--TODO:
+    - [Set Firefox to use wayland]
+    - [Toolbox delays]
+    - []
+    -->
     - [Removing base image packages](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#removing-base-image-packages)
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold)
