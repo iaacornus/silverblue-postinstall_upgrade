@@ -1,12 +1,10 @@
 # silverblue-postinstall_upgrade
 
-This is a post install/post upgrade recommendations and suggestions for Fedora Silverblue or ostree based Fedora (such as Kinoite)
-
-Contents, skip to what you need:
+Post install/upgrade recommendations and suggestions for Fedora Silverblue or `ostree` based Fedora (such as Kinoite). Contents, skip to what you need:
 
 - [Basics (system update)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#update-the-system)
 - [Mount external drives](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#mount-external-drives)
-    - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#automatically-mount-in-boot) 
+    - [Automatically mount in boot](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#automatically-mount-in-boot)
 - [Third party repos, drivers and codecs](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
     - [Setup Flatpak](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#setup-flatpak)
     - [RPMFusion](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#rpmfusion)
@@ -42,31 +40,39 @@ Contents, skip to what you need:
         - [Install](https://github.com/iaacornus/silverblue-postinstall_upgrade#install)
             - [Toolbox installation](https://github.com/iaacornus/silverblue-postinstall_upgrade#toolbox-installation)
             - [Layering](https://github.com/iaacornus/silverblue-postinstall_upgrade#layering)
-        - [Block telemetry](https://github.com/iaacornus/silverblue-postinstall_upgrade#block-telemetry)   
+        - [Block telemetry](https://github.com/iaacornus/silverblue-postinstall_upgrade#block-telemetry)
 
 ***
-        
+
 # Post install
 
-**You can skip all of the steps, these are not required, but can be beneficial or may be some use later.**
+**You can skip all of the steps, majority are not required, but can be beneficial or can be useful later.**
 
 You can get the silverblue cheatsheet of Fedora's Team Silverblue [here](https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf).
 
 ## Note/Disclaimer
 
-I highly suggest to avoid layering as much as possible to the system image, thus you would notice the installation of rpmfusion repositories separated. You should read first the information above the command and try to think it through before executing the given command.
+I highly suggest to avoid layering as much as possible to the system image. Substantial number of layered packages will take a massive toll on system's performance. Consider installing some packages inside of a container or as a flatpak.
+
+Lastly, the command must be first analyzed and given a thought before execution. **NEVER RUN A COMMAND FROM INTERNET WITHOUT ANY ANALYSIS AND CONSIDERATION OF ANY FORESEEABLE CONSEQUENCES.**
 
 ***
 
 # Update the system
 
-After the system is Gnome software automatically download updates of your system, so running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, usually Gnome would give notifications after the update is done. Although you can check the packages with:
+After booting the system, Gnome Software will automatically download updates of your system. Hence, running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, though usually Gnome gives notifications after the update. Although you can its status with:
 
 ```bash
 rpm-ostree upgrade --check
 ```
 
-If you just want a summary of update, such as the added, removed and upgraded do: `rpm-ostree upgrade --check` or `rpm-ostree upgrade --preview`
+You can obtain the summary of the changes or update, including added, removed and upgraded with
+
+```bash
+rpm-ostree upgrade --check
+# this will also work
+rpm-ostree upgrade --preview
+```
 
 Update your preinstalled flatpaks, this may also not be necessary, since this is automatically updated by Gnome software center, but if you want to be sure, do:
 
@@ -74,7 +80,7 @@ Update your preinstalled flatpaks, this may also not be necessary, since this is
 flatpak update
 ```
 
-And reboot after to apply the updates (there is also no problem to do this in GUI).
+Reboot to apply the updates (there is also no problem to do this in GUI).
 
 ```bash
 systemctl reboot
@@ -84,15 +90,27 @@ systemctl reboot
 
 # Mount external drives
 
-If you have an external drive, which you can find with `lsblk` or `fdisk -l` and mount using:
+Some of the external drives will not be automatically mounted by the system if it was not mounted/specified during the installation.
+
+External drives, along with its `UUID` (Universally Unique Identified), can be found using `lsblk` or `fdisk -l` and be mounted using:
 
 ```bash
 sudo mount /dev/sdX <dir>
+# replace <dir> where you want to mount the drive
+# sdx can be nvmeNnJpI where N, J and I are integers e.g. /dev/nvme0n1p1, they can also be /dev/sdb
 ```
 
 ## Automatically mount in boot
 
-To automatically mount it in boot, include the drive in `/etc/fstab`, you need the `UUID` of the drive and its mount point. To do so, list the drives and their `UUID` with `lsblk -f` and add it to `/etc/fstab` with format of:
+External drives can be automatically mounted on boot by including it into `/etc/fstab`. The `UUID` of the drive and its mount point is needed.
+
+Firstly, the drives is recommended to be mounted. List the drives and their `UUID` with `lsblk -f`. Then, add it to `/etc/fstab` with format of:
+
+```bash
+UUID    mount_point     type    options     dump    fsck
+```
+
+Below is an example, **DO NOT COPY AND PASTE**:
 
 ```
 # Ignore the comments, this is and example to fstab entry, don't copy and paste this, your system won't boot
@@ -103,7 +121,9 @@ To automatically mount it in boot, include the drive in `/etc/fstab`, you need t
 # UUID=<your device uuid>                   <mount point>               <filesystem format> <options> <dump>  <fsck>
 ```
 
-Here I suggest using `defaults` for options, 0 for `dump` and `fsck` to disable the checking (increasing the boot time, and avoiding potential errors, and since you only do checking if the drive is part of the OS filesystem), refer to [ArchWiki - fstab](https://wiki.archlinux.org/title/fstab). Check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct UUID and options, other wise your system won't boot.
+Instead of using `<device>`, it is highly recommended to use the `UUID` instead. Moreover, I strongly encourage to use `defaults` for `options`, `0` for `dump` and `fsck` to disable the checking (increasing the boot time, and avoiding potential errors, and since you only do checking if the drive is part of the OS filesystem), refer to [ArchWiki - fstab](https://wiki.archlinux.org/title/fstab).
+
+Finally, check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct UUID and options, otherwise your system won't boot.
 
 ***
 
@@ -113,7 +133,7 @@ Note that some of the drivers may come preinstalled in your system, confirm befo
 
 ## Setup flatpak
 
-Fedora has its own flatpak repository where it filters some of the applications, for access to flathub setup the flathub repository: 
+Fedora has its own flatpak repository where it filters some of the applications, for access to flathub setup the flathub repository:
 
 ```bash
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -123,11 +143,17 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 The main repository of Fedora does not contain every applications, some of the codecs are in the RPMFusion, the NVidia drivers are in the nonfree, while some of the codecs are in free.
 
-Nonfree: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm`
 
-Free: `rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm`
+```bash
+# Nonfree
+rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
-For both: `rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm`
+# Free
+rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+
+# Both
+rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+```
 
 ## Codecs
 
@@ -137,13 +163,13 @@ Fedora disable the automatic install of `openh264` by default, for this reason:
 
 > Upstream Firefox versions download and install the OpenH264 plugin by default automatically. Due to it's binary nature, Fedora disables this automatic download.
 
-You can install the packages `mozilla-openh264` and `gstreamer1-plugin-openh264` to support these codecs in Firefox. And do `CTRL` + `Shift` + `A` in Firefox to go into the add ons manager > Plugins, and enable the OpenH264* plugins.
+You can install the packages `mozilla-openh264` and `gstreamer1-plugin-openh264` to support these codecs in Firefox. Finally, inside Firefox, do `CTRL` + `Shift` + `A` to enter Add Ons Manager > Plugins, and enable the OpenH264* plugins.
 
-```
+```bash
 rpm-ostree install mozilla-openh264 gstreamer1-plugin-openh264
 ```
 
-However, `mozilla-openh264` may give a bad performance some times, depending on the setup, if this is the case, you may want to use `ffmpeg-libs` instead which can solve the problem as suggested by [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), which comes from the nonfree repo and can be installed with `rpm-ostree`.
+However, `mozilla-openh264` may give a bad performance some times, depending on the setup. As an alternative, [u/DelusionalSocialist](https://www.reddit.com/user/DelusionalSocialist/), suggested to use `ffmpeg-libs` which can solve the problem. `ffmpeg-libs` comes from the nonfree repo and can be installed with `rpm-ostree`.
 
 ### GStreamer
 
@@ -165,17 +191,17 @@ Check first if you have nvidia card with `/sbin/lspci | grep -e 3D`, it would sh
 02:00.0 3D controller: NVIDIA Corporation GP108M [GeForce MX230] (rev a1)
 ```
 
-Otherwise, you don't have nvidia card, and don't proceed here. If you have nvidia card, install it, assuming you already installed rpmfusion repo nonfree
+Otherwise, you don't have nvidia card. If you have NVidia card you can install the proprietary driver from the nonfree repo:
 
 ```bash
 rpm-ostree install akmod-nvidia
 ```
 
-And after reboot, check your nvidia install with `modinfo -F version nvidia`, it should give the version number of your driver such as `510.60.02`, not `stderr`.
+Finally, check your NVidia install with `modinfo -F version nvidia`, it should give the version number of your driver such as `510.60.02`, not `stderr`.
 
 ## RPMFusion reinstall
 
-When RPMFusion was installed, it was tied to a specific version of Fedora, thus rebasing for the next release would be a [problem](https://discussion.fedoraproject.org/t/simplifying-updates-for-rpm-fusion-packages-and-other-packages-shipping-their-own-rpm-repos/30364/23), it can be fixed by uninstalling the currently installed and installing a "general" repo:
+The current RPMFusion installed by the command was version-specific as notable by `$(rpm -E %fedora)` in the command. Thus, rebasing for the next release would be a [problem](https://discussion.fedoraproject.org/t/simplifying-updates-for-rpm-fusion-packages-and-other-packages-shipping-their-own-rpm-repos/30364/23). Fortunately, it can be fixed by installing a "general" repo:
 
 ```
 rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfree-release --install rpmfusion-free-release --install rpmfusion-nonfree-release
@@ -185,27 +211,27 @@ rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfr
 
 # Flatpak modifications
 
-Flatpak apps are sandboxed, and thus may not work as expected. The following are some solutions to the errors that may arise from default Flatpak security permissions.
+Flatpak apps are sandboxed. Thus, may not work as expected. The following are some solutions to the errors that may arise from default Flatpak security permissions.
 
 ## Theming
 
-Due to the aforementioned sandboxing, there are 2 methods to installing themes:    
+Due to the aforementioned sandboxing, there are 2 methods to installing themes:
 Either the flatpak version of GTK theme you are using as a flatpak, which you can find by using `search`:
 
 ```bash
 flatpak search gtk3
 ```
 
-Or override the themes directory which depends on how the theme was installed:
+The themes directory can also be overriden depending on how the theme was installed:
 
 ```
 # choose one, you can do all of them but I don't recommend doing it
 
-# if install in home dir
+# if installed in home dir
 sudo flatpak override --system --filesystem=$HOME/.themes # if installed in home dir
 
 # if layered in image
-sudo flatpak override --system --filesystem=/usr/share/themes 
+sudo flatpak override --system --filesystem=/usr/share/themes
 
 # or whatever
 sudo flatpak override --system --filesystem=xdg-data/themes
@@ -213,16 +239,26 @@ sudo flatpak override --system --filesystem=xdg-data/themes
 
 ## Permissions
 
-Other reddit users suggested, such as [u/IceOleg](https://www.reddit.com/user/IceOleg/), to override the `home` and `host` dir as well with:
+Other reddit users suggested, such as [u/IceOleg](https://www.reddit.com/user/IceOleg/), you can remove permissions for access to `home` and `host` dir with:
 
 ```bash
 flatpak override --user --nofilesystem=home
 flatpak override --user --nofilesystem=host
 ```
 
-Which can be given back to some applications that need it later on. [Flatseal](https://github.com/tchx84/flatseal) is also a good utility for managing permissions as [u/GunnarRoxen](https://www.reddit.com/user/GunnarRoxen/) suggested, can be installed with `flatpak install flathub com.github.tchx84.Flatseal`
+The overriden directories can be returned with when required. [Flatseal](https://github.com/tchx84/flatseal) is also a good utility for managing permissions as [u/GunnarRoxen](https://www.reddit.com/user/GunnarRoxen/) suggested. It can be installed with:
 
-The flatpak modifications made can be undone by `sudo flatpak override --system --reset`. The `--system` flag can also be omitted, and `--user` can be used for user-wide changes.
+```bash
+flatpak install flathub com.github.tchx84.Flatseal
+```
+
+The flatpak modifications made can be reset with
+
+```bash
+sudo flatpak override --system --reset
+```
+
+The `--system` flag can also be omitted, and `--user` can be used for user-wide changes.
 
 ## Theming Extended
 
@@ -286,7 +322,7 @@ flatpak uninstall --system --delete-data <app>
 # example
 flatpak uninstall --system --delete-data org.gnome.Calculator
 ```
- 
+
 Here are some you can remove:
 
 1. Calculator `org.gnome.Calculator`
@@ -315,9 +351,9 @@ See this[^1] first
 
 Quoting [Arch Wiki](https://wiki.archlinux.org/title/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance):
 
-> Solid state drive users should be aware that, by default, discarding internal read and write workqueue commands are not enabled by the device-mapper, i.e. block-devices are mounted without the no_read_workqueue and no_write_workqueue option unless you override the default. 
+> Solid state drive users should be aware that, by default, discarding internal read and write workqueue commands are not enabled by the device-mapper, i.e. block-devices are mounted without the no_read_workqueue and no_write_workqueue option unless you override the default.
 
-> The no_read_workqueue and no_write_workqueue flags were introduced by [internal Cloudflare research Speeding up Linux disk encryption](https://blog.cloudflare.com/speeding-up-linux-disk-encryption/) made while investigating overall encryption performance. One of the conclusions is that internal dm-crypt read and write queues decrease performance for SSD drives. While queuing disk operations makes sense for spinning drives, bypassing the queue and writing data synchronously doubled the throughput and cut the SSD drives' IO await operations latency in half. The patches were upstreamed and are available since linux 5.9 and up [[5](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/md/dm-crypt.c?id=39d42fa96ba1b7d2544db3f8ed5da8fb0d5cb877)]. 
+> The no_read_workqueue and no_write_workqueue flags were introduced by [internal Cloudflare research Speeding up Linux disk encryption](https://blog.cloudflare.com/speeding-up-linux-disk-encryption/) made while investigating overall encryption performance. One of the conclusions is that internal dm-crypt read and write queues decrease performance for SSD drives. While queuing disk operations makes sense for spinning drives, bypassing the queue and writing data synchronously doubled the throughput and cut the SSD drives' IO await operations latency in half. The patches were upstreamed and are available since linux 5.9 and up [[5](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/md/dm-crypt.c?id=39d42fa96ba1b7d2544db3f8ed5da8fb0d5cb877)].
 
 To disable this in Fedora encrypted using `dm-crypt`, replace `discard` in `/etc/crypttab` with `no-read-workqueue,no-write-workqueue`, the output of `sudo cat /etc/crypttab` should look like this:
 
@@ -331,10 +367,10 @@ Where `<UUID>` should be unique to your system. Or by using `cryptsetup` which I
 ❯ lsblk -p
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 /dev/zram0          252:0    0   7.5G  0 disk  [SWAP]
-/dev/nvme0n1        259:0    0 476.9G  0 disk  
+/dev/nvme0n1        259:0    0 476.9G  0 disk
 ├─/dev/nvme0n1p1    259:1    0   600M  0 part  /boot/efi
 ├─/dev/nvme0n1p2    259:2    0     1G  0 part  /boot
-└─/dev/nvme0n1p3    259:3    0 475.4G  0 part  
+└─/dev/nvme0n1p3    259:3    0 475.4G  0 part
   └─/dev/mapper/luks-<UUID>
                     253:0    0 475.3G  0 crypt /var/home
 ...
@@ -457,14 +493,14 @@ FISH (Friendly Interactive SHell) is an alternative for BASH (Bourne Again SHell
     - Inline searchable history
     - Inline autosuggestion
     - Tab completion using manpage data
-    
+
 DEMO (Credits to Sid Mohanty, [link to original article, suggested read for more info](https://betterprogramming.pub/fish-vs-zsh-vs-bash-reasons-why-you-need-to-switch-to-fish-4e63a66687eb?gi=fc345308724e))
 
 ![](https://miro.medium.com/max/640/1*AhoFOHQxoLzKiLMg-NVRKQ.gif)
 
 
 FOR INTERESTED:
-- [https://opensource.com/article/20/3/fish-shell](https://opensource.com/article/20/3/fish-shell) 
+- [https://opensource.com/article/20/3/fish-shell](https://opensource.com/article/20/3/fish-shell)
 - [https://fedoramagazine.org/fish-a-friendly-interactive-shell/](https://fedoramagazine.org/fish-a-friendly-interactive-shell/)
 
 ### Install FISH
