@@ -47,25 +47,26 @@ function setup_flatpak () {
 }
 
 function setup_rpmfusion () {
+    #! LIVE DO NOT FUCKING EXECUTE THIS FUNCTION
+    declare -A rpmrepo=( [0]="Free" [1]="NonFree" [2]="Both" )
+    echo -e "Select RPMFusion for install.\n"
 
-}
+    for key in "${!rpmrepo[@]}"; do
+        echo -e "$key.) ${rpmrepo[$key]}"
+    done
 
-function install_codecs () {
+    read -sp "Input the number of the selected choice. " choice
+    echo -e "\n$INFO Installing ${rpmrepo[$choice]}: "
 
-}
-
-function install_nvidia () {
-
-
-}
-
-
-function sys_opts () {
-
-
-}
-
-function laptop_setup () {
-
+    case "${rpmrepo[$choice]}" in
+        "Free")
+            rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm;;
+        "NonFree")
+            rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm;;
+        "Both")
+            rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm;;
+        \?)
+            echo -e "$INVALID Option not found.";;
+    esac
 
 }
