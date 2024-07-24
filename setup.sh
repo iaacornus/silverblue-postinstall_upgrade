@@ -9,6 +9,7 @@
 
 
 FAIL="\e[1;41m[ FAIL ]\e[0m"
+INVALID="\e[1;41m[ INVALID ]\e[0m"
 SUCCESS="\e[1;42m[ SUCCESS ]\e[0m"
 INFO="\e[1;44m[ INFO ]\e[0m"
 __USAGE="
