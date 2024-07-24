@@ -562,6 +562,12 @@ sudo ostree admin config-diff | sort | grep -v system.control
 
 > The output will list files as Removed, Added or Modified. The defaults are available in `/usr/etc` in the very same path, so to revert a modification or a removal simple copy the file over.
 
+You can also utilize `diff` to obtain a more elaborate report:
+
+```bash
+sudo diff -yrW200 --suppress-common-lines --color=always /usr/etc /etc 2>/dev/null
+```
+
 ***
 
 # Miscellaneous
