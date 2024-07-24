@@ -42,6 +42,29 @@ function print_help () {
     exit 0
 }
 
+while getopts ":h" option; do
+    case $option in
+        h)
+            print_help;;
+        a)
+            ;;
+        f)
+            setup_flatpak;;
+        r)
+            setup_rpm;;
+        c)
+            install_codecs;;
+        d)
+            install_drivers;;
+        l)
+            setup_laptop;;
+        n)
+            setup_nvidia;;
+        \?)
+            echo -e "$INVALID Option not found.";;
+    esac
+done
+
 function setup_flatpak () {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
