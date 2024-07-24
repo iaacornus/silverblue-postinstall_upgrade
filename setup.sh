@@ -43,7 +43,7 @@ function print_help () {
 }
 
 function setup_flatpak () {
-
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
 function setup_rpmfusion () {
