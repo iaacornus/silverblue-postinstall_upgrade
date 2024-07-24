@@ -25,7 +25,7 @@ Options:
     -o, --optimize              Perform suggested system optimizations.
     -l, --laptop                Apply laptop recommendations.
     -n, --nvidia                Install proprietary NVidia drivers.
-"   
+"
 
 function setup_fail () {
     echo -e "$FAIL Installation failed for some reason."
@@ -38,12 +38,8 @@ function setup_success () {
 }
 
 function print_help () {
-
-}
-
-function main () {
-
-
+    echo -e "$__USAGE"
+    exit 0
 }
 
 function setup_flatpak () {
