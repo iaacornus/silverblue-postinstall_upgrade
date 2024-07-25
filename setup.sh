@@ -55,12 +55,12 @@ while true; do
         -a | --all )
             setup_success;
             shift;;
-        -f | --flatpak )
-            setup_flatpak;
-            shift;;
-        -r | --rpmfusion )
-            setup_rpm;
-            shift;;
+        # -f | --flatpak ) #* GOOD
+        #     setup_flatpak;
+        #     shift;;
+        # -r | --rpmfusion ) #* GOOD
+        #     setup_rpm;
+        #     shift;;
         -c | --codecs )
             install_codecs;
             shift;;
