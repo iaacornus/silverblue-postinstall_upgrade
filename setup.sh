@@ -59,6 +59,9 @@ while getopts ":h" option; do
             install_drivers;;
         l)
             setup_laptop;;
+        o)
+            optimize;;
+            optimize;;
         n)
             setup_nvidia;;
         \?)
