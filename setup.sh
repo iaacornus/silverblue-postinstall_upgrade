@@ -43,29 +43,42 @@ function print_help () {
     exit 0
 }
 
-while getopts ":h" option; do
-    case $option in
-        h)
-            print_help;;
-        a)
-            ;;
-        f)
-            setup_flatpak;;
-        r)
-            setup_rpm;;
-        c)
-            install_codecs;;
-        d)
-            install_drivers;;
-        l)
-            setup_laptop;;
-        o)
-            optimize;;
-            optimize;;
-        n)
-            setup_nvidia;;
-        \?)
-            echo -e "$INVALID Option not found.";;
+VALID_ARGS=$(getopt -o hafrcdlon -l help,all,flatpak,rpmfusion,codecs,drivers,laptop,optimize,nvidia -- "$@")
+
+eval set -- "$VALID_ARGS"
+
+while true; do
+    case "$1" in
+        -h | --help )
+            print_help;
+            shift;;
+        -a | --all )
+            setup_success;
+            shift;;
+        -f | --flatpak )
+            setup_flatpak;
+            shift;;
+        -r | --rpmfusion )
+            setup_rpm;
+            shift;;
+        -c | --codecs )
+            install_codecs;
+            shift;;
+        -d | --drivers )
+            install_drivers;
+            shift;;
+        -l | --laptop )
+            setup_laptop;
+            shift;;
+        -o | --optimize )
+            optimize;
+            shift;;
+        -n | --nvidia )
+            setup_nvidia;
+            shift;;
+        -- )
+            echo -e "$INVALID Please select an option.";
+            break;;
     esac
 done
 
