@@ -22,6 +22,7 @@ Options:
     -r, --rpmfusion             Setup RPMFusion repository.
     -c, --codecs                Install codecs.
     -d, --driver                Install appropriate drivers.
+    -l, --laptop                Apply laptop recommendations.
     -o, --optimize              Perform suggested system optimizations.
     -l, --laptop                Apply laptop recommendations.
     -n, --nvidia                Install proprietary NVidia drivers.
