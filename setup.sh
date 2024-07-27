@@ -3,7 +3,7 @@
 # ---------------------------------
 #
 # Fedora Silverblue Post Install Script
-# Copyright (c) 2024 James Aaron Erang <iaacornus@gmail.com>
+# Copyright (c) James Aaron Erang <iaacornus.devel@gmail.com> 2024
 #
 # ---------------------------------
 
@@ -25,7 +25,7 @@ Options:
     -m, --msfonts           Install Micro\$oft fonts.
     -l, --laptop            Apply laptop recommendations.
     -o, --optimize          Perform suggested system optimizations.
-    -n, --nvidia                Install proprietary NVidia drivers.
+    -n, --nvidia            Install proprietary NVidia drivers.
 "
 
 function setup_fail () {
