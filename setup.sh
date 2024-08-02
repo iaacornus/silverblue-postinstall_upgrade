@@ -43,6 +43,13 @@ function print_help () {
     exit 0
 }
 
+function check_cwd () {
+    if [[ $(basename $(pwd)) != "silverblue-postinstall_upgrade" ]]; then
+        echo -e "$INFO Set the current working dir inside of the repository."
+        setup_fail
+    fi
+}
+
 function d_gnomesoftware () {
     gnome_software_dir="/etc/xdg/autostart/org.gnome.Software.desktop"
 
