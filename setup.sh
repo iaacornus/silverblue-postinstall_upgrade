@@ -50,6 +50,16 @@ function check_cwd () {
     fi
 }
 
+function install_msfonts () {
+    fonts_dir="$HOME/.local/share/fonts"
+    if [[ ! -d $fonts_dir ]]; then
+        mkdir -p fonts_dir
+    fi
+
+    echo -e "$INFO Installing MS fonts @ "
+    cp -r ./resources/fonts/* fonts_dir
+}
+
 function d_gnomesoftware () {
     gnome_software_dir="/etc/xdg/autostart/org.gnome.Software.desktop"
 
