@@ -43,47 +43,15 @@ function print_help () {
     exit 0
 }
 
-VALID_ARGS=$(getopt -o hafrcdlon -l help,all,flatpak,rpmfusion,codecs,drivers,laptop,optimize,nvidia -- "$@")
+function d_gnomesoftware () {
+    gnome_software_dir="/etc/xdg/autostart/org.gnome.Software.desktop"
 
-eval set -- "$VALID_ARGS"
-
-while true; do
-    case "$1" in
-        -h | --help )
-            print_help;
-            shift;;
-        -a | --all )
-            setup_success;
-            shift;;
-        # -f | --flatpak ) #* GOOD
-        #     setup_flatpak;
-        #     shift;;
-        # -r | --rpmfusion ) #* GOOD
-        #     setup_rpm;
-        #     shift;;
-        -c | --codecs )
-            install_codecs;
-            shift;;
-        -d | --drivers )
-            install_drivers;
-            shift;;
-        -l | --laptop )
-            setup_laptop;
-            shift;;
-        -o | --optimize )
-            optimize;
-            shift;;
-        -n | --nvidia )
-            setup_nvidia;
-            shift;;
-        -- )
-            echo -e "$INVALID Please select an option.";
-            break;;
-    esac
-done
-
-function setup_flatpak () {
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    if [[ -f $gnome_software_dir ]]; then
+        echo -e "$INFO Disabling Gnome Software on startup."
+        sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
+    else
+        echo -e "$INFO Gnome Software already disabled on startup."
+    fi
 }
 
 function setup_rpmfusion () {
