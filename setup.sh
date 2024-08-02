@@ -54,10 +54,15 @@ function d_gnomesoftware () {
     fi
 }
 
-function setup_rpmfusion () {
-    #! LIVE DO NOT FUCKING EXECUTE THIS FUNCTION
-    declare -A rpmrepo=( [0]="Free" [1]="NonFree" [2]="Both" )
-    echo -e "Select RPMFusion for install.\n"
+function d_nmwaitonline () {
+    unit="NetworkManager-wait-online.service"
+    if [[ $(systemctl is-enabled $unit) != "disabled" ]]; then
+        echo -e "$INFO Disabling NetworkManager-wait-online.service."
+        sudo systemctl disable NetworkManager-wait-online.service
+    else
+        echo -e "$INFO NetworkManager-wait-online.service is already disabled."
+    fi
+}
 
     for key in "${!rpmrepo[@]}"; do
         echo -e "$key.) ${rpmrepo[$key]}"
