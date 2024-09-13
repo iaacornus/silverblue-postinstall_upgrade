@@ -83,6 +83,15 @@ Update your preinstalled flatpaks, this may also not be necessary, since this is
 flatpak update
 ```
 
+It is also important to update your firmware using `fwupdmgr`:
+
+```bash
+fwupdmgr refresh --force
+fwupdmgr get-devices
+fwupdmgr get-updates
+fwupdmgr update
+```
+
 Reboot to apply the updates (there is also no problem to do this in GUI).
 
 ```bash
