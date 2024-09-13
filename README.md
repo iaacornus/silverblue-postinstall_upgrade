@@ -22,6 +22,7 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-gnome-software)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+    - [Enable TRIM support for SSDs]
     - [Replace Firefox RPM with Firefox Flatpak]
         - [Set Firefox to use wayland]
     - [Toolbox delays]
