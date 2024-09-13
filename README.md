@@ -25,6 +25,7 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Enable TRIM support for SSDs]
     - [Replace Firefox RPM with Firefox Flatpak]
         - [Set Firefox to use wayland]
+        - [Firefox `about:config` Improvements]
     - [Toolbox delays]
     - [Removing base image packages](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#removing-base-image-packages)
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
