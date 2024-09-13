@@ -22,6 +22,11 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Unnecessary flatpaks](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#remove-unnecessary-gnome-flatpaks)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-gnome-software)
     - [Disabling workqeues to improve SSD performance](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+    - [Enable TRIM support for SSDs]
+    - [Replace Firefox RPM with Firefox Flatpak]
+        - [Set Firefox to use wayland]
+        - [Firefox `about:config` Improvements]
+    - [Toolbox delays]
     - [Removing base image packages](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#removing-base-image-packages)
 - [Laptop Users](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#laptop-users)
     - [Battery Threshold](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/README.md#set-battery-threshold)
@@ -78,6 +83,15 @@ Update your preinstalled flatpaks, this may also not be necessary, since this is
 
 ```bash
 flatpak update
+```
+
+It is also important to update your firmware using `fwupdmgr`:
+
+```bash
+fwupdmgr refresh --force
+fwupdmgr get-devices
+fwupdmgr get-updates
+fwupdmgr update
 ```
 
 Reboot to apply the updates (there is also no problem to do this in GUI).
@@ -289,7 +303,7 @@ And append `GTK_THEME=<theme-name>` at the end of the `gtk_theme.conf`
 
 If this didn't sufficed, then, you can try:
 
-```
+```bash
 sudo flatpak override --system --env=GTK_THEME='<theme-name>'
 ```
 
@@ -305,7 +319,7 @@ You can also disable `NetworkManager-wait-online.service`. It is simply a ["serv
 
 Disabling it can decrease the boot time of at least ~15s-20s:
 
-```
+```bash
 sudo systemctl disable NetworkManager-wait-online.service
 ```
 
@@ -317,7 +331,7 @@ Masking it is not recommend, since as explained by [u/chrisawi](https://www.redd
 
 There are also some preinstalled flatpak that you can safely remove. You can completely remove the flatpak with:
 
-```
+```bash
 flatpak uninstall --system --delete-data <app>
 # example
 flatpak uninstall --system --delete-data org.gnome.Calculator
@@ -337,15 +351,15 @@ Here are some you can remove:
 
 ## Disable Gnome Software
 
-Gnome software launches for some reason even tho it is not used, this takes at least 100MB of RAM up to 900MB (as reported anecdotally). You can remove from from the autostart in `/etc/xdg/autostart/org.gnome.Software.desktop`, by:
+Gnome Software launches for some reason even tho it is not used, this takes at least 100MB of RAM up to 900MB (as reported anecdotally). You can prevent Gnome Software from autostart by removing `/etc/xdg/autostart/org.gnome.Software.desktop`:
 
-```
+```bash
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 ```
 
 ## Disable `dm-crypt` workqeues for SSD user to improve performance
 
-See this[^1] first
+Refer to this before proceeding[^1].
 
 [^1]: There are reported data loss on some and not on others, citing that the code of cloudflare (they implemented it) is buggy. I've tried it myself and so far I didn't experienced any data loss, and I didn't encountered complains about it yet from zen kernel users, since zen kernel disabled it by default. But again, it may not be always the case.
 
@@ -357,13 +371,13 @@ Quoting [Arch Wiki](https://wiki.archlinux.org/title/Dm-crypt/Specialties#Disabl
 
 To disable this in Fedora encrypted using `dm-crypt`, replace `discard` in `/etc/crypttab` with `no-read-workqueue,no-write-workqueue`, the output of `sudo cat /etc/crypttab` should look like this:
 
-```
+```bash
 luks-<UUID> UUID=<UUID> none no-read-workqueue,no-write-workqueue
 ```
 
-Where `<UUID>` should be unique to your system. Or by using `cryptsetup` which I recommend, Fedora uses LUKS2. Find the device with `lsblk -p`, the one with `/dev/mapper/luks-<UUID>` is the one encrypted, for example:
+Where `<UUID>` should be unique to your system. An alternative is by using `cryptsetup`. Find the device with `lsblk -p`, the one with `/dev/mapper/luks-<UUID>` is the one encrypted, for example:
 
-```
+```bash
 ❯ lsblk -p
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 /dev/zram0          252:0    0   7.5G  0 disk  [SWAP]
@@ -378,13 +392,13 @@ NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 
 In my case it is the `/dev/nvme0n1p3`. Then verify it with `sudo cryptsetup isLuks /dev/<DEV> && echo SUCCESS` where device is the device name, e.g. `nvme0n1p3`, if it echoed success then the device is LUKS. Then get the name of the encrypted device with:
 
-```
+```bash
 sudo dmsetup info luks-<UUID>
 ```
 
 Which should output something like this:
 
-```
+```bash
 ❯ sudo dmsetup info luks-e88105e1-690f-423e-a168-a9f9a2e613e9
 Name:              luks-e88105e1-690f-423e-a168-a9f9a2e613e9
 State:             ACTIVE
@@ -399,19 +413,19 @@ UUID: CRYPT-LUKS2-e88105e1690f423ea168a9f9a2e613e9-luks-e88105e1-690f-423e-a168-
 
 Take the name, in this case, `luks-e88105e1-690f-423e-a168-a9f9a2e613e9`, and execute the command:
 
-```
+```bash
 sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent refresh <name>
 ```
 
-And do a reboot.
+Finally, reboot.
 
 ## Removing base image packages
 
 **This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
 
-[u/VVine6](https://www.reddit.com/user/VVine6/) recommended some packages that can be removed from the base image, which includes VM host support and Gnome classic shell, which can be removed via:
+[u/VVine6](https://www.reddit.com/user/VVine6/) recommended some packages that can be removed from the base image, such as VM host support and Gnome classic shell:
 
-```
+```bash
 rpm-ostree override remove open-vm-tools-desktop open-vm-tools qemu-guest-agent spice-vdagent spice-webdavd virtualbox-guest-additions gnome-shell-extension-apps-menu gnome-classic-session gnome-shell-extension-window-list gnome-shell-extension-background-logo gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu
 ```
 
@@ -442,38 +456,36 @@ WantedBy=multi-user.target
 
 ## Notification when battery threshold is reached
 
-I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/`. Then create a `.sys` directory inside your `$HOME` with `mkdir $HOME/.sys` and move [`battery-threshold.sh`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/scripts/battery-threshold.sh) inside the created directory, then activate the service and timer:
+I created a systemd service and timer in `systemd/` that checks the battery level and state once every 15 minutes to check whether the laptop is still plugged when the battery threshold is reached. Move `battery-threshold.service` and `battery-threshold.timer` in `$HOME/.config/systemd/user/`. Then create a `.sys` directory inside your `$HOME` with `mkdir $HOME/.sys` and move [`battery-threshold.sh`](https://github.com/iaacornus/silverblue-postinstall_upgrade/blob/main/scripts/battery-threshold.sh) inside the created directory and activate the service and timer:
 
-```
+```bash
 systemctl --user enable battery-threshold.service
 systemctl --user enable battery-threshold.timer
 ```
 
 ## Keyboard backlight
 
-In some laptops, keyboard backlight may not work out of the box, it can be toggled with `brightnessctl`. First find the keyboard backlight in `/sys/class/leds` by listing the directories, it is usually named `::kbd_backlight/brightness` which can be contained in one more directory, in Asus laptops it is usually in `/sys/class/leds/asus\:\:kbd_backlight/brightness`.
+In some laptops whereas keyboard backlight do not work out of the box, it can be toggled with `brightnessctl`.
 
-You can find out the current brightness by:
+The keyboard backlight can be found in `/sys/class/leds`. It is usually named `::kbd_backlight/brightness` which can be contained in one more directory, in Asus laptops it is usually in `/sys/class/leds/asus\:\:kbd_backlight/brightness`. You can find out the current brightness by:
 
-```
+```bash
 brightnessctl --device='<device>::kbd_backlight' info
 ```
 
 If it is set to 0, it is disabled, in 1 it is in lowest, and as the number increment, the brightness increases. You can set the brightness by `brightnessctl --device='<device>::kbd_backlight' set 3`, for example in Asus laptops it is:
 
-```
+```bash
 brightnessctl --device='asus::kbd_backlight' set 3
 ```
-
-You can also instead use a script to echo to the file, but it would not persist in boot, thus you may need systemd service if you would go to this route.
 
 ## Set suspend to deep sleep
 
 **Only if your laptop drains fast under `s2idle`**
 
-In some laptop, the battery drains rapidly when suspended under `s2idle`, particularly those with Alder Lake CPUs. To fix this, you can set the kernel parameters with `mem_sleep_default=deep`. To do this properly, use the command, `grubby`:
+In some laptop, the battery drains rapidly when suspended under `s2idle`, particularly those with Alder Lake CPUs. One of the workaround is setting the kernel parameters with `mem_sleep_default=deep`. This can be done via `grubby`:
 
-```
+```bash
 sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
 ```
 
@@ -505,24 +517,25 @@ FOR INTERESTED:
 
 ### Install FISH
 
-To install FISH in OSTree systems:
+Install `fish` with:
 
-```
+```bash
 rpm-ostree install fish
 ```
 
-Then to allow toolbox to use it:
+You can also install it inside `toolbox`:
 
-```
-sudo dnf install install fish # if inside toolbox or
+```bash
+sudo dnf install install fish
+# or if inside toolbox
 toolbox run sudo dnf install fish
 ```
 
 ### Set FISH as default shell
 
-Since Fedora does not include `chsh` in the base image of Silverblue due to its setuid root, thus to set the default shell use:
+Since Fedora does not have `chsh` in the base image of Silverblue due to its `setuid` root, you can use `usermod` to set the default shell:
 
-```
+```bash
 # after reboot
 sudo usermod --shell /usr/bin/fish $USER
 ```
@@ -531,13 +544,13 @@ sudo usermod --shell /usr/bin/fish $USER
 
 FISH comes with web-based configuration which can be access with:
 
-```
+```bash
 fish_config
 ```
 
-This will give a GUI where you can set your prompt, color of syntax highlighting (colorscheme), aliases (abbreviations), functions (view of defined functions). Then to disable the welcome message you can run (once):
+This will give a GUI where you can set your prompt, color of syntax highlighting, aliases, functions (view of defined functions). Then to disable the welcome message you can run (once):
 
-```
+```bash
 set -U fish_greeting
 ```
 
@@ -549,11 +562,17 @@ set -U fish_greeting
 
 This can be helpful in debugging as suggested by [u/VVine6](https://www.reddit.com/user/VVine6/)
 
-```
+```bash
 sudo ostree admin config-diff | sort | grep -v system.control
 ```
 
 > The output will list files as Removed, Added or Modified. The defaults are available in `/usr/etc` in the very same path, so to revert a modification or a removal simple copy the file over.
+
+You can also utilize `diff` to obtain a more elaborate report:
+
+```bash
+sudo diff -yrW200 --suppress-common-lines --color=always /usr/etc /etc 2>/dev/null
+```
 
 ***
 
@@ -571,29 +590,29 @@ There are three ways to install via flatpak, toolbox or layering.
 
 Create a toolbox with `toolbox create`, you can specify the version or distro you want to use with `-r` and `-d`, respectively. Then go inside the toolbox and update the system:
 
-```
+```bash
 sudo dnf update
 ```
 
-And following VSCode's documentation, import the GPG keys and create a repository:
+Following VSCode's documentation, import the GPG keys and create a repository:
 
-```
+```bash
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 ```
 
-```
+```bash
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 ```
 
 Then update the metadata with `sudo dnf check-update`, and do `sudo dnf install code`. To create a desktop icon:
 
-```
+```bash
 touch $HOME/.local/share/applications/code.desktop
 ```
 
-And append the following lines of code:
+Finally, append the following lines of code to create a desktop entry:
 
-```
+```bash
 [Desktop Entry]
 Type=Application
 Version=1.0 # you can replace the version
@@ -609,7 +628,7 @@ If you used a toolbox with different name, change `Exec` to `toolbox --container
 
 Since the filesystem is immutable, you cannot import the GPG, unless you do specific changes which is not covered here. Thus, simply create a repository for code:
 
-```
+```bash
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 ```
 
