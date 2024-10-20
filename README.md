@@ -8,6 +8,7 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
 - [Third party repos, drivers and codecs](#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
     - [Setup Flatpak](#setup-flatpak)
     - [RPMFusion](#rpmfusion)
+    - [Disable unused repositories](#disable-unused-repositories)
     - [Codecs](#codecs)
         - [Openh264](#openh264-or-ffmpeg-libs)
         - [GStreamer](#gstreamer)
@@ -168,6 +169,21 @@ rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
 # Both
 rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 ```
+
+## Disable unused repositories
+
+Some repositories are enabled by default but are not used. You can disable it by:
+
+```bash
+sudo sed -i 's/enabled=1/enabled=0/' \
+/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo \
+/etc/yum.repos.d/fedora-cisco-openh264.repo \
+/etc/yum.repos.d/google-chrome.repo \
+/etc/yum.repos.d/rpmfusion-nonfree-nvidia-driver.repo \
+/etc/yum.repos.d/rpmfusion-nonfree-steam.repo
+```
+
+Although you may want to enable `fedora-cisco-openh264`.
 
 ## Codecs
 
