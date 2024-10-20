@@ -486,7 +486,7 @@ brightnessctl --device='asus::kbd_backlight' set 3
 In some laptop, the battery drains rapidly when suspended under `s2idle`, particularly those with Alder Lake CPUs. One of the workaround is setting the kernel parameters with `mem_sleep_default=deep`. This can be done via `grubby`:
 
 ```bash
-sudo grubby --update-kernel=ALL --args="mem_sleep_default=deep"
+rpm-ostree kargs --append="mem_sleep_default=deep
 ```
 
 Do a reboot, then check it with `cat /sys/power/mem_sleep`, where the `deep` should be enclosed with brackets (`[deep]`).
