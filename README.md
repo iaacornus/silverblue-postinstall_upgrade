@@ -439,7 +439,7 @@ sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent 
 
 Finally, reboot.
 
-## Enable discard
+### Enable discard
 
 Due to [security implications](https://asalor.blogspot.com/2011/08/trim-dm-crypt-problems.html), `discard` option is not enabled by default. However, for majority it should not be significant. Thus, the performance improvement(s) outweight(s) the security concern(s).
 
@@ -449,7 +449,7 @@ In Fedora Silverblue, the `crypttab` (`/etc/crypttab`) is not passed into the `i
 rpm-ostree kargs --append=rd.luks.options=UID=discard
 ```
 
-## Change to `noatime`
+### Change to `noatime`
 
 By default, the BTRFS subvolumes/volumes in Fedora Silverblue is mounted as `relatime` (along with `compress=zstd:1`[^2]). The main interest here is the option, `relatime`. Disabling `relatime` can possible reduce unnecessary writes on SSD. Thus, potentially reducing the amount of read-write cycle, insignificantly improving its lifespan. Although in my case, it has considerable benefits:
 
