@@ -2,23 +2,23 @@
 
 Post install/upgrade recommendations and suggestions for Fedora Silverblue or `ostree` based Fedora (such as Kinoite). Contents, skip to what you need:
 
-- [Basics (system update)](#update-the-system)
-- [Mount external drives](#mount-external-drives)
-    - [Automatically mount in boot](#automatically-mount-in-boot)
-- [Third party repos, drivers and codecs](#install-rpm-fusion-and-other-repos-you-need-codecs-and-drivers)
-    - [Setup Flatpak](#setup-flatpak)
+- [System Update](#system-update)
+- [Mount External Drives](#mount-external-drives)
+    - [Automatically Mount](#automatically-mount)
+- [Third Party Repos, Drivers, Codecs](#install-rpm-fusion-and-other-repos)
+    - [Flatpak](#flatpak)
     - [RPMFusion](#rpmfusion)
-    - [Disable unused repositories](#disable-unused-repositories)
+    - [Unused Repos](#unused-repos)
     - [Codecs](#codecs)
-        - [Thumbnail support](#thumbnail-support)
-        - [Openh264](#openh264-or-ffmpeg-libs)
+        - [Thumbnail Support](#thumbnail-support)
+        - [Openh264](#openh264)
         - [GStreamer](#gstreamer)
     - [NVidia](#nvidia-drivers)
-    - [Reinstalling RPMFusion to avoid rebasing problems](#rpmfusion-reinstall)
-- [Flatpak Modifications/Solutions](#flatpak-modifications)
+    - [Reinstall RPMFusion](#reinstall-rpmfusion)
+- [Flatpak Modifications](#flatpak-modifications)
     - [Theming](#theming)
     - [Permissions](#permissions)
-    - [Theming extended](#theming-extended)
+    - [Theming Extended](#theming-extended)
 - [System Optimizations](#system-optimizations)
     <!--- TODO: - [Disable Fedora flatpak repo]
         - [Reinstall flatpak apps]
@@ -26,33 +26,32 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
         - [Set Firefox to use wayland]
         - [Firefox `about:config` Improvements] -->
     - [Disable `NetworkManager-wait-online.service`](#disable-networkmanager-wait-onlineservice)
-    - [Unnecessary flatpaks](#remove-unnecessary-gnome-flatpaks)
-    - [Removing Gnome software (stop consuming RAM due to autostart and background running)](#disable-gnome-software)
-    - [SSD related optimizations](#ssd-related-optimizations)
-        - [Disabling workqeues](#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
-        - [Enable discard](#enable-discard)
+    - [Unnecessary Flatpaks](#unnecessary-flatpaks)
+    - [Removing GNOME Software](#disable-gnome-software)
+    - [SSD Related Optimizations](#ssd-related-optimizations)
+        - [Disable Workqueues](#disable-workqeues)
+        - [Enable Discard](#enable-discard)
         - [Change to `noatime`](#change-to-noatime)
     <!--- TODO: - [BTRFS maintenance]
     - [Toolbox delays] -->
-    - [Removing base image packages](#removing-base-image-packages)
+    - [Removable Base Image Packages](#removable-base-image-packages)
 - [Laptop Users](#laptop-users)
     - [Battery Threshold](#set-battery-threshold)
-    - [Battery threshold notification](#notification-when-battery-threshold-is-reached)
     - [Keyboard Backlight](#keyboard-backlight)
-    - [Set suspend to deep sleep](#set-suspend-to-deep-sleep)
+    - [Deep Sleep](#deep-sleep)
 - [Customizations](#customizations)
-    - [Use FISH as default shell](#use-fish-as-default-shell)
+    - [Use FISH](#use-fish)
         - [Install FISH](#install-fish)
-        - [Set FISH as default shell](#set-fish-as-default-shell)
-        - [Customize FISH (basics)](#customize-fish-basics)
+        - [Default Shell](#default-shell)
+        - [Customize FISH](#customize-fish)
 - [Tips and Tricks](#tips-and-tricks)
-    - [Contrast current modifications of configs with the default](#contrast-current-modifications-of-configs-with-the-default)
-- [Miscellaneous](https://github.com/iaacornus/silverblue-postinstall_upgrade#miscellaneous)
-    - [VSCode](https://github.com/iaacornus/silverblue-postinstall_upgrade#vscode)
-        - [Install](https://github.com/iaacornus/silverblue-postinstall_upgrade#install)
-            - [Toolbox installation](https://github.com/iaacornus/silverblue-postinstall_upgrade#toolbox-installation)
-            - [Layering](https://github.com/iaacornus/silverblue-postinstall_upgrade#layering)
-        - [Block telemetry](https://github.com/iaacornus/silverblue-postinstall_upgrade#block-telemetry)
+    - [Compare and Contrast](#contrast-and-contrast)
+- [Miscellaneous](#miscellaneous)
+    - [VSCode](#vscode)
+        - [Install](#install)
+            - [Toolbox](#toolbox-installation)
+            - [Layering](#layering)
+        - [Block Telemetry](#block-telemetry)
 
 ***
 
@@ -70,7 +69,7 @@ Lastly, the command must be first analyzed and given a thought before execution.
 
 ***
 
-# Update the system
+# System Update
 
 After booting the system, Gnome Software will automatically download updates of your system. Hence, running `rpm-ostree upgrade` after boot would only give `stderr`. You can wait and reboot later, though usually Gnome gives notifications after the update. Although you can its status with:
 
@@ -105,7 +104,7 @@ Reboot.
 
 ***
 
-# Mount external drives
+# Mount External Drives
 
 Some of the external drives will not be automatically mounted by the system if it was not mounted/specified during the installation.
 
@@ -117,7 +116,7 @@ sudo mount /dev/sdX <dir>
 # sdx can be nvmeNnJpI where N, J and I are integers e.g. /dev/nvme0n1p1, they can also be /dev/sdb
 ```
 
-## Automatically mount in boot
+## Automatically Mount
 
 External drives can be automatically mounted on boot by including it into `/etc/fstab`. The `UUID` of the drive and its mount point is needed.
 
@@ -144,11 +143,11 @@ Finally, check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct 
 
 ***
 
-# Install rpm-fusion and other repos, codecs, and drivers
+# Install RPMFusion and Other Repos
 
 Note that some of the drivers may come preinstalled in your system, confirm before proceeding.
 
-## Setup flatpak
+## Flatpak
 
 Fedora has its own flatpak repository where it filters some of the applications, for access to flathub setup the flathub repository:
 
@@ -156,7 +155,7 @@ Fedora has its own flatpak repository where it filters some of the applications,
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
-## RPMfusion
+## RPMFusion
 
 The main repository of Fedora does not contain every applications, some of the codecs are in the RPMFusion, the NVidia drivers are in the nonfree, while some of the codecs are in free.
 
@@ -171,7 +170,7 @@ rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rele
 rpm-ostree install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 ```
 
-## Disable unused repositories
+## Unused Repositories
 
 Some repositories are enabled by default but are not used. You can disable it by:
 
@@ -188,7 +187,7 @@ Although you may want to enable `fedora-cisco-openh264`.
 
 ## Codecs
 
-### Thumbnail support
+### Thumbnail Support
 
 Unfortunately, perhaps due to legal/patent reasons, `ffmpeg` is not included by default. Currently, as the time of this writing, `ffmpeg` conflicts with several free alternatives. Thus, to install `ffmpeg`, which is needed for `.mp4` thumbnail support, you need to override some base image packages:
 
@@ -198,7 +197,7 @@ rpm-ostree override remove libavdevice-free libavcodec-free libavfilter-free lib
 
 Then, install `ffmpegthumbnailer` and `libavcodec-freeworld`.
 
-### `Openh264` or `ffmpeg-libs`
+### `Openh264`
 
 Fedora disable the automatic install of `openh264` by default, for this reason:
 
@@ -240,7 +239,7 @@ rpm-ostree install akmod-nvidia
 
 Finally, check your NVidia install with `modinfo -F version nvidia`, it should give the version number of your driver such as `510.60.02`, not `stderr`.
 
-## RPMFusion reinstall
+## Reinstall RPMFusion
 
 The current RPMFusion installed by the command was version-specific as notable by `$(rpm -E %fedora)` in the command. Thus, rebasing for the next release would be a [problem](https://discussion.fedoraproject.org/t/simplifying-updates-for-rpm-fusion-packages-and-other-packages-shipping-their-own-rpm-repos/30364/23). Fortunately, it can be fixed by installing a "general" repo:
 
@@ -250,7 +249,7 @@ rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfr
 
 ***
 
-# Flatpak modifications
+# Flatpak Modifications
 
 Flatpak apps are sandboxed. Thus, may not work as expected. The following are some solutions to the errors that may arise from default Flatpak security permissions.
 
@@ -336,7 +335,7 @@ sudo flatpak override --system --env=GTK_THEME='<theme-name>'
 
 ***
 
-# System optimizations
+# System Optimizations
 
 ## Disable `NetworkManager-wait-online.service`
 
@@ -354,7 +353,7 @@ Masking it is not recommend, since as explained by [u/chrisawi](https://www.redd
 
 > Also, wait-online services are `WantedBy=network-online.target`, so they do nothing unless another service explicitly pulls that target in because it can't handle starting before the network is up. The nfs services are a typical example, see: `systemctl list-dependencies --reverse network-online.target`. It might be better to disable such services than to leave them potentially broken.
 
-## Remove unnecessary gnome flatpaks
+## Unnecessary Flatpaks
 
 There are also some preinstalled flatpak that you can safely remove. You can completely remove the flatpak with:
 
@@ -376,7 +375,7 @@ Here are some you can remove:
 8. Weather apps `org.gnome.Weather`
 9. Disk usage analyzer `org.gnome.baobab`
 
-## Disable Gnome Software
+## Disable GNOME Software
 
 Gnome Software launches for some reason even tho it is not used, this takes at least 100MB of RAM up to 900MB (as reported anecdotally). You can prevent Gnome Software from autostart by removing `/etc/xdg/autostart/org.gnome.Software.desktop`:
 
@@ -401,7 +400,7 @@ NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 ...
 ```
 
-### Disable `dm-crypt` workqeues
+### Disable Workqueues
 
 Refer to this before proceeding[^1].
 
@@ -448,7 +447,7 @@ sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent 
 
 Finally, reboot.
 
-### Enable discard
+### Enable Discard
 
 Due to [security implications](https://asalor.blogspot.com/2011/08/trim-dm-crypt-problems.html), `discard` option is not enabled by default. However, for majority it should not be significant. Thus, the performance improvement(s) outweight(s) the security concern(s).
 
@@ -468,7 +467,7 @@ By default, the BTRFS subvolumes/volumes in Fedora Silverblue is mounted as `rel
 sudo sed -i 's/compress=zstd:1/noatime,compress=zstd:1/' /etc/fstab
 ```
 
-## Removing base image packages
+## Removable Base Image Packages
 
 **This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
 
@@ -484,7 +483,7 @@ Later on, before rebasing this needs to be included back, which can be done with
 
 # Laptop Users
 
-## Set battery threshold for laptop users
+## Battery Threshold
 
 I recommend setting battery threshold of at least 80% to decrease wear on the battery. This can be done by echoing the threshold to `/sys/class/power_supply/BAT0/charge_control_end_threshold`. However, this resets every reboot, so it is good idea to make a systemd service for it:
 
@@ -503,7 +502,7 @@ ExecStart=/usr/bin/env bash -c 'echo 89 > /sys/class/power_supply/BAT0/charge_co
 WantedBy=multi-user.target
 ```
 
-## Keyboard backlight
+## Keyboard Backlight
 
 In some laptops whereas keyboard backlight do not work out of the box, it can be toggled with `brightnessctl`.
 
@@ -519,7 +518,7 @@ If it is set to 0, it is disabled, in 1 it is in lowest, and as the number incre
 brightnessctl --device='asus::kbd_backlight' set 3
 ```
 
-## Set suspend to deep sleep
+## Deep Sleep
 
 **Only if your laptop drains fast under `s2idle`**
 
@@ -535,7 +534,7 @@ Do a reboot, then check it with `cat /sys/power/mem_sleep`, where the `deep` sho
 
 # Customizations
 
-## Use FISH as default shell
+## Use FISH
 
 > Fish (friendly interactive shell) is a smart and user-friendly command line shell that works on Linux, MacOS, and other operating systems. Use it for everyday work in your terminal and for scripting. Scripts written in fish are less cryptic than their equivalent bash versions.
 
@@ -570,7 +569,7 @@ sudo dnf install install fish
 toolbox run sudo dnf install fish
 ```
 
-### Set FISH as default shell
+### Default Shell
 
 Since Fedora does not have `chsh` in the base image of Silverblue due to its `setuid` root, you can use `usermod` to set the default shell:
 
@@ -579,7 +578,7 @@ Since Fedora does not have `chsh` in the base image of Silverblue due to its `se
 sudo usermod --shell /usr/bin/fish $USER
 ```
 
-### Customize FISH (basics)
+### Customize FISH
 
 FISH comes with web-based configuration which can be access with:
 
@@ -597,7 +596,7 @@ set -U fish_greeting
 
 # Tips and Tricks
 
-## Contrast current modifications of configs with the default
+## Compare and Contrast
 
 This can be helpful in debugging as suggested by [u/VVine6](https://www.reddit.com/user/VVine6/)
 
@@ -623,7 +622,7 @@ There are three ways to install via flatpak, toolbox or layering.
 
 ### Install
 
-#### Toolbox installation
+#### Toolbox
 
 **This section assumes that you will use Fedora as toolbox container**
 
@@ -673,7 +672,7 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 
 Then refresh the metadata with `rpm-ostree refresh-md`, and do `rpm-ostree install code`.
 
-## Block telemetry
+## Block Telemetry
 
 VSCode contains telemetry, to block some of them block some of the domain in your `/etc/hosts` by setting it to loopback (`127.0.0.1`) by appending:
 
