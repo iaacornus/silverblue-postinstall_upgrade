@@ -373,7 +373,24 @@ Gnome Software launches for some reason even tho it is not used, this takes at l
 sudo rm /etc/xdg/autostart/org.gnome.Software.desktop
 ```
 
-## Disable `dm-crypt` workqeues for SSD user to improve performance
+## SSD Related Optimizations
+
+If you will proceed in this part, you need to obtain your device's unique identifier (`UID`). A `UID` is unique in each of your blocks/devices. You can find your partition/block/device's `UID` with `lsblk -p`:
+
+```bash
+❯ lsblk -p
+NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+/dev/zram0          252:0    0   7.5G  0 disk  [SWAP]
+/dev/nvme0n1        259:0    0 476.9G  0 disk
+├─/dev/nvme0n1p1    259:1    0   600M  0 part  /boot/efi
+├─/dev/nvme0n1p2    259:2    0     1G  0 part  /boot
+└─/dev/nvme0n1p3    259:3    0 475.4G  0 part
+  └─/dev/mapper/luks-<UUID>
+                    253:0    0 475.3G  0 crypt /var/home
+...
+```
+
+### Disable `dm-crypt` workqeues for SSD user to improve performance
 
 Refer to this before proceeding[^1].
 
