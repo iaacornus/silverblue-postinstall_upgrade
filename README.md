@@ -488,7 +488,7 @@ StartLimitBurst=0
 [Service]
 Type=oneshot
 Restart=on-failure
-ExecStart=/usr/bin/env bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold'
+ExecStart=/usr/bin/env bash -c 'echo 89 > /sys/class/power_supply/BAT0/charge_control_end_threshold'
 
 [Install]
 WantedBy=multi-user.target
@@ -549,7 +549,6 @@ FISH (Friendly Interactive SHell) is an alternative for BASH (Bourne Again SHell
 DEMO (Credits to Sid Mohanty, [link to original article, suggested read for more info](https://betterprogramming.pub/fish-vs-zsh-vs-bash-reasons-why-you-need-to-switch-to-fish-4e63a66687eb?gi=fc345308724e))
 
 ![](https://miro.medium.com/max/640/1*AhoFOHQxoLzKiLMg-NVRKQ.gif)
-
 
 FOR INTERESTED:
 - [https://opensource.com/article/20/3/fish-shell](https://opensource.com/article/20/3/fish-shell)
