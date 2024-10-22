@@ -447,7 +447,15 @@ In Fedora Silverblue, the `crypttab` (`/etc/crypttab`) is not passed into the `i
 rpm-ostree kargs --append=rd.luks.options=UID=discard
 ```
 
-## Enalbe compression for `zstd`
+## Change to `noatime`
+
+By default, the BTRFS subvolumes/volumes in Fedora Silverblue is mounted as `relatime` (along with `compress=zstd:1`[^2]). The main interest here is the option, `relatime`. Disabling `relatime` can possible reduce unnecessary writes on SSD. Thus, potentially reducing the amount of read-write cycle, insignificantly improving its lifespan. Although in my case, it has considerable benefits:
+
+[^2]: BTRFS supports transparent compression, whereas the files are automatically compressed when written into the disk. In SSD, this reduces the amount of read-write cycle. Thus, prolonging its lifespan. Although, not really that significant.
+
+```bash
+sudo sed -i 's/compress=zstd:1/noatime,compress=zstd:1/' /etc/fstab
+```
 
 ## Removing base image packages
 
