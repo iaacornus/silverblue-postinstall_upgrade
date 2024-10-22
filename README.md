@@ -22,8 +22,10 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Disable `NetworkManager-wait-online.service`](#disable-networkmanager-wait-onlineservice)
     - [Unnecessary flatpaks](#remove-unnecessary-gnome-flatpaks)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](#disable-gnome-software)
-    - [Disabling workqeues to improve SSD performance](#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
-    - [Enable TRIM support for SSD]
+    - [SSD related optimizations](#ssd-related-optimizations)
+        - [Disabling workqeues](#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
+        - [Enable discard](#enable-discard)
+        - [Change to `noatime`](#change-to-noatime)
     - [Replace Firefox RPM with Firefox Flatpak]
         - [Set Firefox to use wayland]
         - [Firefox `about:config` Improvements]
@@ -390,7 +392,7 @@ NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 ...
 ```
 
-### Disable `dm-crypt` workqeues for SSD user to improve performance
+### Disable `dm-crypt` workqeues
 
 Refer to this before proceeding[^1].
 
