@@ -10,6 +10,7 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [RPMFusion](#rpmfusion)
     - [Disable unused repositories](#disable-unused-repositories)
     - [Codecs](#codecs)
+        - [Thumbnail support](#thumbnail-support)
         - [Openh264](#openh264-or-ffmpeg-libs)
         - [GStreamer](#gstreamer)
     - [NVidia](#nvidia-drivers)
@@ -140,7 +141,7 @@ Finally, check `/etc/fstab` with `cat /etc/fstab`. Be sure to input the correct 
 
 ***
 
-# Install rpm-fusion and other repos you need, codecs, and drivers
+# Install rpm-fusion and other repos, codecs, and drivers
 
 Note that some of the drivers may come preinstalled in your system, confirm before proceeding.
 
@@ -155,7 +156,6 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 ## RPMfusion
 
 The main repository of Fedora does not contain every applications, some of the codecs are in the RPMFusion, the NVidia drivers are in the nonfree, while some of the codecs are in free.
-
 
 ```bash
 # Nonfree
@@ -184,6 +184,16 @@ sudo sed -i 's/enabled=1/enabled=0/' \
 Although you may want to enable `fedora-cisco-openh264`.
 
 ## Codecs
+
+### Thumbnail support
+
+Unfortunately, perhaps due to legal/patent reasons, `ffmpeg` is not included by default. Currently, as the time of this writing, `ffmpeg` conflicts with several free alternatives. Thus, to install `ffmpeg`, which is needed for `.mp4` thumbnail support, you need to override some base image packages:
+
+```bash
+rpm-ostree override remove libavdevice-free libavcodec-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free ffmpeg-free --install ffmpeg --uninstall libavcodec-freeworld
+```
+
+Then, install `ffmpegthumbnailer` and `libavcodec-freeworld`.
 
 ### `Openh264` or `ffmpeg-libs`
 
