@@ -408,22 +408,7 @@ To disable this in Fedora encrypted using `dm-crypt`, replace `discard` in `/etc
 luks-<UUID> UUID=<UUID> none no-read-workqueue,no-write-workqueue
 ```
 
-Where `<UUID>` should be unique to your system. An alternative is by using `cryptsetup`. Find the device with `lsblk -p`, the one with `/dev/mapper/luks-<UUID>` is the one encrypted, for example:
-
-```bash
-❯ lsblk -p
-NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
-/dev/zram0          252:0    0   7.5G  0 disk  [SWAP]
-/dev/nvme0n1        259:0    0 476.9G  0 disk
-├─/dev/nvme0n1p1    259:1    0   600M  0 part  /boot/efi
-├─/dev/nvme0n1p2    259:2    0     1G  0 part  /boot
-└─/dev/nvme0n1p3    259:3    0 475.4G  0 part
-  └─/dev/mapper/luks-<UUID>
-                    253:0    0 475.3G  0 crypt /var/home
-...
-```
-
-In my case it is the `/dev/nvme0n1p3`. Then verify it with `sudo cryptsetup isLuks /dev/<DEV> && echo SUCCESS` where device is the device name, e.g. `nvme0n1p3`, if it echoed success then the device is LUKS. Then get the name of the encrypted device with:
+In my setup, the encrypted partition is `/dev/nvme0n1p3`. This can be verified with `sudo cryptsetup isLuks /dev/<DEV> && echo SUCCESS` where device is the device name, e.g. `nvme0n1p3`, it should echo `SUCCESS` if the given partition is encrypted. Once confirmed, obtain the device name with:
 
 ```bash
 sudo dmsetup info luks-<UUID>
@@ -444,7 +429,7 @@ Number of targets: 1
 UUID: CRYPT-LUKS2-e88105e1690f423ea168a9f9a2e613e9-luks-e88105e1-690f-423e-a168-a9f9a2e613e9
 ```
 
-Take the name, in this case, `luks-e88105e1-690f-423e-a168-a9f9a2e613e9`, and execute the command:
+Take the name, in this case `luks-e88105e1-690f-423e-a168-a9f9a2e613e9`, and execute the command:
 
 ```bash
 sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent refresh <name>
