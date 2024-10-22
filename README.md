@@ -437,6 +437,18 @@ sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent 
 
 Finally, reboot.
 
+## Enable discard
+
+Due to [security implications](https://asalor.blogspot.com/2011/08/trim-dm-crypt-problems.html), `discard` option is not enabled by default. However, for majority it should not be significant. Thus, the performance improvement(s) outweight(s) the security concern(s).
+
+In Fedora Silverblue, the `crypttab` (`/etc/crypttab`) is not passed into the `intramfs` images. But you can enable discard by passing it as kernel arguments using `rpm-ostree kargs --append`:
+
+```bash
+rpm-ostree kargs --append=rd.luks.options=UID=discard
+```
+
+## Enalbe compression for `zstd`
+
 ## Removing base image packages
 
 **This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
