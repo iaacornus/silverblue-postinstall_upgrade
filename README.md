@@ -97,11 +97,7 @@ fwupdmgr get-updates
 fwupdmgr update
 ```
 
-Reboot to apply the updates (there is also no problem to do this in GUI).
-
-```bash
-systemctl reboot
-```
+Reboot.
 
 ***
 
