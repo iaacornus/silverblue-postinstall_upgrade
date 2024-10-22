@@ -20,6 +20,11 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
     - [Permissions](#permissions)
     - [Theming extended](#theming-extended)
 - [System Optimizations](#system-optimizations)
+    <!--- TODO: - [Disable Fedora flatpak repo]
+        - [Reinstall flatpak apps]
+    - [Replace Firefox RPM with Firefox Flatpak]
+        - [Set Firefox to use wayland]
+        - [Firefox `about:config` Improvements] -->
     - [Disable `NetworkManager-wait-online.service`](#disable-networkmanager-wait-onlineservice)
     - [Unnecessary flatpaks](#remove-unnecessary-gnome-flatpaks)
     - [Removing Gnome software (stop consuming RAM due to autostart and background running)](#disable-gnome-software)
@@ -27,10 +32,8 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
         - [Disabling workqeues](#disable-dm-crypt-workqeues-for-ssd-user-to-improve-performance)
         - [Enable discard](#enable-discard)
         - [Change to `noatime`](#change-to-noatime)
-    - [Replace Firefox RPM with Firefox Flatpak]
-        - [Set Firefox to use wayland]
-        - [Firefox `about:config` Improvements]
-    - [Toolbox delays]
+    <!--- TODO: - [BTRFS maintenance]
+    - [Toolbox delays] -->
     - [Removing base image packages](#removing-base-image-packages)
 - [Laptop Users](#laptop-users)
     - [Battery Threshold](#set-battery-threshold)
