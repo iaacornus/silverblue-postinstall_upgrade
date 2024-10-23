@@ -403,9 +403,6 @@ NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 ...
 ```
 
-> [!IMPORTANT]
-> You cannot disable workqueues and discard simultaneously, at least based on my experience. Thus, you need to select which one to disable or leave both untouched.
-
 ### Disable Workqueues
 
 > [!CAUTION]
