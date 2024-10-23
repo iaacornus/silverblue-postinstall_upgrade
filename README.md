@@ -57,17 +57,17 @@ Post install/upgrade recommendations and suggestions for Fedora Silverblue or `o
 
 # Post install
 
-> [NOTE]
+> [!NOTE]
 > **You can skip all of the steps, majority are not required, but can be beneficial or can be useful later.**
 
 You can get the silverblue cheatsheet of Fedora's Team Silverblue [here](https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf).
 
 ## Note/Disclaimer
 
-> [IMPORTANT]
+> [!IMPORTANT]
 > I highly suggest to avoid layering as much as possible to the system image. Substantial number of layered packages will take a massive toll on system's performance. Consider installing some packages inside of a container or as a flatpak.
 
-> [IMPORTANT]
+> [!IMPORTANT]
 > Lastly, the command must be first analyzed and given a thought before execution. **NEVER RUN A COMMAND FROM INTERNET WITHOUT ANY ANALYSIS AND CONSIDERATION OF ANY FORESEEABLE CONSEQUENCES.**
 
 ***
@@ -94,7 +94,7 @@ Update your preinstalled flatpaks, this may also not be necessary, since this is
 flatpak update
 ```
 
-It is also important to update your firmware using `fwupdmgr`:
+It is also !important to update your firmware using `fwupdmgr`:
 
 ```bash
 fwupdmgr refresh --force
@@ -403,12 +403,12 @@ NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
 ...
 ```
 
-> [IMPORTANT]
+> [!IMPORTANT]
 > You cannot disable workqueues and discard simultaneously, at least based on my experience. Thus, you need to select which one to disable or leave both untouched.
 
 ### Disable Workqueues
 
-> [CAUTION]
+> [!CAUTION]
 > There are reported data loss on some and not on others, citing that the code of cloudflare (they implemented it) is buggy. I've tried it myself and so far I didn't experienced any data loss, and I didn't encountered complains about it yet from zen kernel users, since zen kernel disabled it by default. But again, it may not be always the case.
 
 Quoting [Arch Wiki](https://wiki.archlinux.org/title/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance):
@@ -454,7 +454,7 @@ Finally, reboot.
 
 ### Enable Discard
 
-> [NOTE]
+> [!NOTE]
 > Due to [security implications](https://asalor.blogspot.com/2011/08/trim-dm-crypt-problems.html), `discard` option is not enabled by default. However, for majority it should not be significant. Thus, the performance improvement(s) outweight(s) the security concern(s).
 
 In Fedora Silverblue, the `crypttab` (`/etc/crypttab`) is not passed into the `intramfs` images. But you can enable discard by passing it as kernel arguments using `rpm-ostree kargs --append`:
@@ -475,7 +475,7 @@ sudo sed -i 's/compress=zstd:1/noatime,compress=zstd:1/' /etc/fstab
 
 ## Removable Base Image Packages
 
-> [IMPORTANT]
+> [!IMPORTANT]
 > **This needs to be reset before you can rebase to another version, e.g. 36 -> 37, refer [here](https://github.com/fedora-silverblue/issue-tracker/issues/288)**
 
 [u/VVine6](https://www.reddit.com/user/VVine6/) recommended some packages that can be removed from the base image, such as VM host support and Gnome classic shell:
@@ -527,7 +527,7 @@ brightnessctl --device='asus::kbd_backlight' set 3
 
 ## Deep Sleep
 
-> [IMPORTANT]
+> [!IMPORTANT]
 > **Only if your laptop drains fast under `s2idle`**
 
 In some laptop, the battery drains rapidly when suspended under `s2idle`, particularly those with Alder Lake CPUs. One of the workaround is setting the kernel parameters with `mem_sleep_default=deep`. This can be done via `grubby`:
