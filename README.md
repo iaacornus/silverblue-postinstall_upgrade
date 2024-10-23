@@ -414,12 +414,6 @@ Quoting [Arch Wiki](https://wiki.archlinux.org/title/Dm-crypt/Specialties#Disabl
 
 > The no_read_workqueue and no_write_workqueue flags were introduced by [internal Cloudflare research Speeding up Linux disk encryption](https://blog.cloudflare.com/speeding-up-linux-disk-encryption/) made while investigating overall encryption performance. One of the conclusions is that internal dm-crypt read and write queues decrease performance for SSD drives. While queuing disk operations makes sense for spinning drives, bypassing the queue and writing data synchronously doubled the throughput and cut the SSD drives' IO await operations latency in half. The patches were upstreamed and are available since linux 5.9 and up [[5](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/md/dm-crypt.c?id=39d42fa96ba1b7d2544db3f8ed5da8fb0d5cb877)].
 
-To disable this in Fedora encrypted using `dm-crypt`, replace `discard` in `/etc/crypttab` with `no-read-workqueue,no-write-workqueue`, the output of `sudo cat /etc/crypttab` should look like this:
-
-```bash
-luks-<UUID> UUID=<UUID> none no-read-workqueue,no-write-workqueue
-```
-
 In my setup, the encrypted partition is `/dev/nvme0n1p3`. This can be verified with `sudo cryptsetup isLuks /dev/<DEV> && echo SUCCESS` where device is the device name, e.g. `nvme0n1p3`, it should echo `SUCCESS` if the given partition is encrypted. Once confirmed, obtain the device name with:
 
 ```bash
@@ -447,7 +441,12 @@ Take the name, in this case `luks-e88105e1-690f-423e-a168-a9f9a2e613e9`, and exe
 sudo cryptsetup --perf-no_read_workqueue --perf-no_write_workqueue --persistent refresh <name>
 ```
 
-Finally, reboot.
+Finally, reboot. This can be verified with:
+
+```bash
+❯ sudo cryptsetup luksDump /dev/<DEV> | grep Flags
+Flags:       	no-read-workqueue no-write-workqueue
+```
 
 ### Enable Discard
 
